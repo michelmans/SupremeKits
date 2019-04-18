@@ -1,0 +1,21 @@
+SupremeKits:
+  Tag: '&7[&6&lSupremeKits&r&7] '
+  
+  Commands:
+    NoPermission: '&c&oYou don''t have permission to use &9$command$&c.&r&c If you believe this is an error, &nplease contact an administrator.'
+    WrongFormat: '&cPlease use: &9'
+    Unknown: '&cUnknown command. Use &9/as help &cfor more information.'
+  
+  Kits:
+    Unknown: '&cKit $displayname$&6 doesn''t exist.'
+    Received: '&6Received kit $displayname$&6.'
+    PotionsRestored: '&6Potions have been restored.'
+    Created: '&6Kit $displayname$&6 created.'
+    Exists: '&cKit $displayname$&c already exists.'
+    Deleted: '&8Kit $displayname$&8 deleted.'
+    InventorySet: '&6Current inventory and effects set for kit $displayname$&6.'
+    List: '&6Available kits: '
+    
+  Campfire:
+    Set: '&6Campfire set at $x$, $y$, $z$.'
+    Removed: '&6Campfire at $x$, $y$, $z$ removed.' 

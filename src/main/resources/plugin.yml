@@ -1,0 +1,99 @@
+name: SupremeKits
+main: com.alchemi.supremekits.main
+version: ${project.version}
+api-version: 1.13
+author: Alchemi
+description: A supreme kits plugin
+depend: [AlchemicLibrary]
+softdepend: [RFChairs]
+
+commands:
+  createkit:
+    description: Create a kit.
+    usage: /createkit <name> [displayname]
+    aliases: ["createkit", "ckit", "ck"]
+  
+  deletekit:
+    description: Delete a kit.
+    usage: /deletekit <name>
+    aliases: ["deletekit", "delkit", "dkit", "dk"]
+  
+  kit:
+    description: Get a kit.
+    usage: /kit <name>
+    aliases: ["k", "kit", "getkit"]
+    
+  setkitinventory:
+    description: Set your inventory as the kit.
+    usage: /setkitinventory <name>
+    aliases: ["setkitinv", "setkitinventory", "setkit"]
+  
+  supremekits:
+    description: Base command.
+    usage: /sk <create|delete|getkit|list|setkit> <name> [displayname]
+    aliases: ["supremekits", "sk", "kits", "supremekit"]
+  
+  setcampfire:
+    description: Create a campfire.
+    usage: /setcampfire [x] [y] [z]
+    aliases: ["setcampfire", "scf", "setcamp"]
+    
+  removecampfire:
+    description: Remove a campfire.
+    usage: /removecampfire [x] [y] [z]
+    aliases: ["removecampfire", "rcf", "removecamp"]
+    
+  campfire:
+    description: Base campfire command.
+    usage: /campfire <set|remove> [x] [y] [z]
+    aliases: ["campfire", "camp"]
+  
+permissions:
+  supremekits.createkit:
+    description: Permission to create a kit.
+    default: false
+  
+  supremekits.setkit:
+    description: Permission to set a kit.
+    default: false
+   
+  supremekits.kit.*:
+    description: Permission for all kits.
+    default: false
+    
+  supremekits.deletekit:
+    description: Permission to delete a kit.
+    default: false
+    
+  supremekits.reload:
+    description: Reload permission
+    default: false
+    
+  supremekits.save:
+    description: Save permission
+    default: false
+  
+  supremekits.campfire.*:
+    description: All campfire permissions.
+    default: false
+    children:
+      supremekits.campfire.use: true
+      supremekits.campfire.set: true
+      supremekits.campfire.remove: true
+      supremekits.campfire: true
+    
+  supremekits.campfire:
+    description: Base campfire permission.
+    default: false
+    
+  supremekits.campfire.use:
+    description: Permission to use a campfire.
+    default: true
+  
+  supremekits.campfire.set:
+    description: Permission to make a campfire.
+    default: false
+  
+  supremekits.campfire.remove:
+    description: Permission to remove a campfire.
+    default: false

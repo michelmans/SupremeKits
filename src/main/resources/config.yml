@@ -1,0 +1,10 @@
+validPotionTypes:
+- POTION
+- LINGERING_POTION
+- SPLASH_POTION
+- FIREWORK_ROCKET
+
+hideEffectParticles: true
+
+campfireRange: 10
+campfireTime: 10

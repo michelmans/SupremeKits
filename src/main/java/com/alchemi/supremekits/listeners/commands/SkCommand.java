@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 
 import com.alchemi.al.configurations.Messenger;
 import com.alchemi.al.configurations.SexyConfiguration;
@@ -259,7 +260,15 @@ public class SkCommand implements CommandExecutor {
 			
 			if (main.instance.hasPermission(sender, "supremekits.kit.*") 
 					|| main.instance.hasPermission(sender, kit.getPerm())) {
+				
+				for (Tameable e : ((Player)sender).getWorld().getEntitiesByClass(Tameable.class)) {
+					if (e.isTamed() && e.getOwner().getUniqueId().equals(sender.getUniqueId())) {
+						e.remove();
+					}
+				}
+				
 				kit.applyKit(sender);
+				
 				messenger.sendMessage(MESSAGES.KITS_RECEIVED.value()
 						.replace("$displayname$", kit.getDisplayName())
 						.replace("$name$", kit.getName()), sender);

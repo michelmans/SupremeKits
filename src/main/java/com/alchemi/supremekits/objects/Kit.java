@@ -17,8 +17,8 @@ import org.bukkit.potion.PotionEffect;
 
 import com.alchemi.al.configurations.SexyConfiguration;
 import com.alchemi.supremekits.Config;
-import com.alchemi.supremekits.main;
 import com.alchemi.supremekits.Config.MESSAGES;
+import com.alchemi.supremekits.main;
 import com.alchemi.supremekits.meta.KitMeta;
 import com.alchemi.supremekits.objects.configuration.KitPotion;
 import com.sun.istack.internal.Nullable;
@@ -30,6 +30,7 @@ public class Kit {
 	
 	private List<KitPotion> effects = new ArrayList<KitPotion>();
 	private List<ItemStack> potions = new ArrayList<ItemStack>();
+	private List<String> commands = new ArrayList<String>();
 	
 	private final SexyConfiguration configurationFile;
 	private String name;
@@ -116,6 +117,10 @@ public class Kit {
 			
 		}
 		
+		if (file.contains("commands")) {
+			commands = file.getStringList("commands");
+		}
+		
 		perm = new Permission("supremekits.kit." + name.toLowerCase());
 		
 		if (Bukkit.getPluginManager().getPermission(perm.getName()) != null) Bukkit.getPluginManager().addPermission(perm);
@@ -158,6 +163,10 @@ public class Kit {
 			armourContents[2] = configurationFile.getItemStack("armour.leggings", null);
 			armourContents[3] = configurationFile.getItemStack("armour.boots", null);
 			
+		}
+		
+		if (configurationFile.contains("commands")) {
+			commands = configurationFile.getStringList("commands");
 		}
 	}
 	
@@ -224,6 +233,10 @@ public class Kit {
 		player.removeMetadata(KitMeta.class.getSimpleName(), main.instance);
 		player.setMetadata(KitMeta.class.getSimpleName(), new KitMeta(this));
 		player.updateInventory();
+		
+		for (String cmd : commands) {
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", player.getName()));
+		}
 	}
 	
 	public void replenishPotions(Player player) {

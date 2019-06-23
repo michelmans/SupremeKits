@@ -235,6 +235,10 @@ public class Kit {
 		for (String cmd : commands) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", player.getName()));
 		}
+		
+		main.getInstance().getMessenger().sendMessage(MESSAGES.KITS_RECEIVED.value()
+				.replace("$displayname$", getDisplayName())
+				.replace("$name$", getName()), player);
 	}
 	
 	public void replenishPotions(Player player) {

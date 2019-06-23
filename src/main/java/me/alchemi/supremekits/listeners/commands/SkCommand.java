@@ -42,7 +42,8 @@ public class SkCommand implements CommandExecutor {
 		
 		if (command.getName().equals("supremekits")) {
 			if (args.length < 1) {
-				messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + skCmd.getUsage(), sender);
+//				messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + skCmd.getUsage(), sender);
+				list(sender);
 				return true;
 			} else if (args.length == 1) {
 				if (Arrays.asList(listAliases).contains(args[0])) {
@@ -268,10 +269,6 @@ public class SkCommand implements CommandExecutor {
 				}
 				
 				kit.applyKit(sender);
-				
-				messenger.sendMessage(MESSAGES.KITS_RECEIVED.value()
-						.replace("$displayname$", kit.getDisplayName())
-						.replace("$name$", kit.getName()), sender);
 			} else {
 				messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/kit " + kit.getName()), sender);
 			}
@@ -309,14 +306,19 @@ public class SkCommand implements CommandExecutor {
 	
 	private void list(CommandSender sender) {
 		String msg = MESSAGES.KITS_LIST.value();
+//		List<String> msgs = new ArrayList<String>();
 		for (Kit kit : main.getInstance().getKits()) {
+			
 			if (main.getInstance().hasPermission(sender, kit.getPerm())
 					|| main.getInstance().hasPermission(sender, "supremekits.kit.*")) {
-				msg += kit.getDisplayName();
-				msg += "&6, ";
+				
+				msg += kit.getDisplayName() + "&6, ";
+//				msgs.add(kit.getDisplayName());
+				
 			}
-			msg = msg.substring(0, msg.length() - 4);
 		}
+		msg = msg.substring(0, msg.length() - 4);
+//		messenger.sendMessages((Player) sender, msgs.toArray(new String[msgs.size()]));
 		messenger.sendMessage(msg, sender);
 	}
 

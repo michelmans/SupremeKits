@@ -21,11 +21,14 @@ import me.alchemi.al.objects.base.PluginBase;
 import me.alchemi.al.objects.handling.SexyLocation;
 import me.alchemi.supremekits.listeners.EventListener;
 import me.alchemi.supremekits.listeners.commands.CampfireCommand;
+import me.alchemi.supremekits.listeners.commands.ClickCommand;
 import me.alchemi.supremekits.listeners.commands.SkCommand;
 import me.alchemi.supremekits.listeners.tabcompleters.CampfireTabCompleter;
+import me.alchemi.supremekits.listeners.tabcompleters.ClickTabCompleter;
 import me.alchemi.supremekits.listeners.tabcompleters.SkTabCompleter;
 import me.alchemi.supremekits.objects.Campfire;
 import me.alchemi.supremekits.objects.Kit;
+import me.alchemi.supremekits.objects.click.AbstractClick;
 
 public class main extends PluginBase {
 	
@@ -76,6 +79,9 @@ public class main extends PluginBase {
 				}
 			}
 		}
+		
+		messenger.print("&6Trying to load available clickers...");
+		AbstractClick.loadClickers();
 		
 		if (getServer().getPluginManager().getPlugin("RFChairs") != null 
 				|| getServer().getPluginManager().isPluginEnabled("RFChairs")) {
@@ -133,6 +139,7 @@ public class main extends PluginBase {
 		getCommand("campfire").setExecutor(new CampfireCommand());
 		getCommand("setcampfire").setExecutor(new CampfireCommand());
 		getCommand("removecampfire").setExecutor(new CampfireCommand());
+		getCommand("clicker").setExecutor(new ClickCommand());
 		
 		
 		getCommand("supremekits").setTabCompleter(new SkTabCompleter());
@@ -142,6 +149,7 @@ public class main extends PluginBase {
 		getCommand("campfire").setTabCompleter(new CampfireTabCompleter());
 		getCommand("setcampfire").setTabCompleter(new CampfireTabCompleter());
 		getCommand("removecampfire").setTabCompleter(new CampfireTabCompleter());
+		getCommand("clicker").setTabCompleter(new ClickTabCompleter());
 	}
 	
 	public boolean hasPermission(CommandSender sender, String perm) {

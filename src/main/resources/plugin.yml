@@ -47,15 +47,21 @@ commands:
     description: Base campfire command.
     usage: /campfire <set|remove> [x] [y] [z]
     aliases: ["campfire", "camp"]
+    
+  clicker:
+    description: Set a clicker at the pointed location.
+    usage: /clicker <create|delete|modify> <kit>
+    aliases: ["click"]
+    permission: supremekits.clicker
   
 permissions:
   supremekits.createkit:
     description: Permission to create a kit.
-    default: false
+    default: op
   
   supremekits.setkit:
     description: Permission to set a kit.
-    default: false
+    default: op
    
   supremekits.kit.*:
     description: Permission for all kits.
@@ -63,19 +69,19 @@ permissions:
     
   supremekits.deletekit:
     description: Permission to delete a kit.
-    default: false
+    default: op
     
   supremekits.reload:
     description: Reload permission
-    default: false
+    default: op
     
   supremekits.save:
     description: Save permission
-    default: false
+    default: op
   
   supremekits.campfire.*:
     description: All campfire permissions.
-    default: false
+    default: op
     children:
       supremekits.campfire.use: true
       supremekits.campfire.set: true
@@ -84,16 +90,41 @@ permissions:
     
   supremekits.campfire:
     description: Base campfire permission.
-    default: false
+    default: op
     
   supremekits.campfire.use:
     description: Permission to use a campfire.
-    default: true
+    default: op
   
   supremekits.campfire.set:
     description: Permission to make a campfire.
-    default: false
+    default: op
   
   supremekits.campfire.remove:
     description: Permission to remove a campfire.
-    default: false
+    default: op
+  
+  supremekits.clicker.*:
+    description: All clicker permissions.
+    default: op
+    children:
+      supremekits.clicker: true
+      supremekits.clicker.create: true
+      supremekits.clicker.delete: true
+      supremekits.clicker.modify: true
+  
+  supremekits.clicker:
+    description: Clicker pemission.
+    default: op
+  
+  supremekits.clicker.create:
+    description: Permission to create a clicker.
+    default: op
+
+  supremekits.clicker.delete:
+    description: Permission to delete a clicker.
+    default: op
+
+  supremekits.clicker.modify:
+    description: Permission to modify a clicker.
+    default: op

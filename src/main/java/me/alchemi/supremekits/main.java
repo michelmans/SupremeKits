@@ -1,4 +1,4 @@
-package com.alchemi.supremekits;
+package me.alchemi.supremekits;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,36 +14,28 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.configurations.SexyConfiguration;
-import com.alchemi.al.objects.SexyLocation;
-import com.alchemi.supremekits.listeners.EventListener;
-import com.alchemi.supremekits.listeners.commands.CampfireCommand;
-import com.alchemi.supremekits.listeners.commands.SkCommand;
-import com.alchemi.supremekits.listeners.tabcompleters.CampfireTabCompleter;
-import com.alchemi.supremekits.listeners.tabcompleters.SkTabCompleter;
-import com.alchemi.supremekits.objects.Campfire;
-import com.alchemi.supremekits.objects.Kit;
+import me.alchemi.al.configurations.Messenger;
+import me.alchemi.al.configurations.SexyConfiguration;
+import me.alchemi.al.objects.base.PluginBase;
+import me.alchemi.al.objects.handling.SexyLocation;
+import me.alchemi.supremekits.listeners.EventListener;
+import me.alchemi.supremekits.listeners.commands.CampfireCommand;
+import me.alchemi.supremekits.listeners.commands.SkCommand;
+import me.alchemi.supremekits.listeners.tabcompleters.CampfireTabCompleter;
+import me.alchemi.supremekits.listeners.tabcompleters.SkTabCompleter;
+import me.alchemi.supremekits.objects.Campfire;
+import me.alchemi.supremekits.objects.Kit;
 
-public class main extends JavaPlugin{
-
-	public static Messenger messenger;
-	
-	public static final int CONFIG_FILE_VERSION = 1;
-	public static final int MESSAGES_FILE_VERSION = 2;
-	
-	public static File CONFIG_FILE;
-	public static File MESSAGES_FILE;
+public class main extends PluginBase {
 	
 	public static File KITS_FOLDER;
 	
-	public static SexyConfiguration CAMPFIRES;
+	public SexyConfiguration CAMPFIRES;
 	
-	public static main instance;
+	private static main instance;
 	
-	public static boolean RFCenabled = false;
+	public boolean RFCenabled = false;
 	
 	public Map<String, Kit> kits = new HashMap<String, Kit>();
 	
@@ -54,16 +46,12 @@ public class main extends JavaPlugin{
 		
 		instance = this;
 		
-		messenger = new Messenger(this);
+		setMessenger(new Messenger(this));
 		
-		messenger.print("&6DALEKS ARE SUPREME!!!");
-		
-		CONFIG_FILE = new File(getDataFolder(), "config.yml");
-		MESSAGES_FILE = new File(getDataFolder(), "messages.yml");
 		KITS_FOLDER = new File(getDataFolder(), "kits");
 		
 		try {
-			Config.enable();
+			new Config();
 			messenger.print("&6Configs enabled!");
 		} catch (IOException | InvalidConfigurationException e) {
 			System.err.println("[SupremeKits]: Could not enable config files. Disabling plugin...");
@@ -99,7 +87,7 @@ public class main extends JavaPlugin{
 			try {
 				new File(getDataFolder(), "campfires.yml").createNewFile();
 			} catch (IOException e) {}
-			CAMPFIRES = new SexyConfiguration(new File(getDataFolder(), "campfires.yml"));
+			CAMPFIRES = SexyConfiguration.loadConfiguration(new File(getDataFolder(), "campfires.yml"));
 		} else {
 			CAMPFIRES = SexyConfiguration.loadConfiguration(new File(getDataFolder(), "campfires.yml"));
 			
@@ -115,13 +103,15 @@ public class main extends JavaPlugin{
 		
 		enableCommands();
 		Bukkit.getPluginManager().registerEvents(new EventListener(), this);
+		
+		messenger.print("&6DALEKS ARE SUPREME!!!");
 	}
 	
 	@Override
 	public void onDisable() {
 		messenger.print("&6THE.. DOCTOR... IS... ESCAPING...\n&6WHAT... ARE... THESE... WORDS?\n&6EXPLAIN! EXPLAIN!");
 		
-		for (Kit kit : main.instance.getKits()) {
+		for (Kit kit : main.getInstance().getKits()) {
 			if (!kit.isEdited()) continue;
 			messenger.print("Saving: " + kit.getDisplayName());
 			kit.save();
@@ -219,6 +209,14 @@ public class main extends JavaPlugin{
 	
 	public Collection<Campfire> getCamps(){
 		return camps.values();
+	}
+
+	public static main getInstance() {
+		return instance;
+	}
+	
+	public Messenger getMessenger() {
+		return messenger;
 	}
 	
 }

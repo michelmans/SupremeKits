@@ -1,4 +1,4 @@
-package com.alchemi.supremekits.listeners.commands;
+package me.alchemi.supremekits.listeners.commands;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,13 +14,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 
-import com.alchemi.al.configurations.Messenger;
-import com.alchemi.al.configurations.SexyConfiguration;
-import com.alchemi.al.objects.SexyLocation;
-import com.alchemi.supremekits.Config.MESSAGES;
-import com.alchemi.supremekits.main;
-import com.alchemi.supremekits.objects.Campfire;
-import com.alchemi.supremekits.objects.Kit;
+import me.alchemi.al.configurations.Messenger;
+import me.alchemi.al.configurations.SexyConfiguration;
+import me.alchemi.al.objects.handling.SexyLocation;
+import me.alchemi.supremekits.Config.MESSAGES;
+import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.objects.Campfire;
+import me.alchemi.supremekits.objects.Kit;
 
 public class SkCommand implements CommandExecutor {
 
@@ -30,12 +30,12 @@ public class SkCommand implements CommandExecutor {
 	public static final String[] getAliases = new String[] {"get", "kit", "g", "getkit"};
 	public static final String[] setAliases = new String[] {"set", "setinv", "setkit"};
 	
-	Messenger messenger = main.messenger;
-	PluginCommand skCmd = main.instance.getCommand("supremekits");
-	PluginCommand createCmd = main.instance.getCommand("createkit");
-	PluginCommand kitCmd = main.instance.getCommand("kit");
-	PluginCommand deleteCmd = main.instance.getCommand("deletekit");
-	PluginCommand setCmd = main.instance.getCommand("setkitinventory");
+	Messenger messenger = main.getInstance().getMessenger();
+	PluginCommand skCmd = main.getInstance().getCommand("supremekits");
+	PluginCommand createCmd = main.getInstance().getCommand("createkit");
+	PluginCommand kitCmd = main.getInstance().getCommand("kit");
+	PluginCommand deleteCmd = main.getInstance().getCommand("deletekit");
+	PluginCommand setCmd = main.getInstance().getCommand("setkitinventory");
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -71,28 +71,28 @@ public class SkCommand implements CommandExecutor {
 								} catch (FileNotFoundException e) {
 									e.printStackTrace();
 								}
-								if (kit != null) main.instance.kits.put(kit.getName(), kit);
+								if (kit != null) main.getInstance().kits.put(kit.getName(), kit);
 							}
 						}
 					}
 					
 					if (Bukkit.getPluginManager().getPlugin("RFChairs") != null) {
-						main.RFCenabled = true;
+						main.getInstance().RFCenabled = true;
 					}
 					
-					if (!new File(main.instance.getDataFolder(), "campfires.yml").exists()) {
+					if (!new File(main.getInstance().getDataFolder(), "campfires.yml").exists()) {
 						try {
-							new File(main.instance.getDataFolder(), "campfires.yml").createNewFile();
+							new File(main.getInstance().getDataFolder(), "campfires.yml").createNewFile();
 						} catch (IOException e) {}
-						main.CAMPFIRES = new SexyConfiguration(new File(main.instance.getDataFolder(), "campfires.yml"));
+						main.getInstance().CAMPFIRES = SexyConfiguration.loadConfiguration(new File(main.getInstance().getDataFolder(), "campfires.yml"));
 					} else {
-						main.CAMPFIRES = SexyConfiguration.loadConfiguration(new File(main.instance.getDataFolder(), "campfires.yml"));
+						main.getInstance().CAMPFIRES = SexyConfiguration.loadConfiguration(new File(main.getInstance().getDataFolder(), "campfires.yml"));
 						
-						for (String path : main.CAMPFIRES.getValues(false).keySet()) {
+						for (String path : main.getInstance().CAMPFIRES.getValues(false).keySet()) {
 							
-							ConfigurationSection sec = main.CAMPFIRES.getConfigurationSection(path);
+							ConfigurationSection sec = main.getInstance().CAMPFIRES.getConfigurationSection(path);
 							SexyLocation sl = new SexyLocation(sec);
-							main.instance.camps.put(sl.getLocation(), new Campfire(sl.getLocation()));
+							main.getInstance().camps.put(sl.getLocation(), new Campfire(sl.getLocation()));
 							
 						}
 						
@@ -100,7 +100,7 @@ public class SkCommand implements CommandExecutor {
 					
 				} else if (args[0].equals("save")) { 
 					
-					for (Kit kit : main.instance.getKits()) {
+					for (Kit kit : main.getInstance().getKits()) {
 						if (!kit.isEdited()) continue;
 						messenger.print("Saving: " + kit.getDisplayName());
 						kit.save();
@@ -216,14 +216,14 @@ public class SkCommand implements CommandExecutor {
 	
 	private void create(Player sender, String[] args) {
 		
-		if (main.instance.hasPermission(sender, "supremekits.create")) {
+		if (main.getInstance().hasPermission(sender, "supremekits.create")) {
 			Kit newKit = Kit.createKitArgs(sender, args);
-			if (main.instance.doesKitExist(newKit)) {
+			if (main.getInstance().doesKitExist(newKit)) {
 				messenger.sendMessage(MESSAGES.KITS_EXISTS.value()
-						.replace("$displayname$", main.instance.getKit(newKit.getName()).getDisplayName())
+						.replace("$displayname$", main.getInstance().getKit(newKit.getName()).getDisplayName())
 						.replace("$name$", newKit.getName()), sender);
 			} else {
-				main.instance.newKit(newKit);
+				main.getInstance().newKit(newKit);
 				messenger.sendMessage(MESSAGES.KITS_CREATED.value()
 						.replace("$displayname$", newKit.getDisplayName())
 						.replace("$name$", newKit.getName()), sender);
@@ -236,8 +236,8 @@ public class SkCommand implements CommandExecutor {
 	
 	private void delete(CommandSender sender, String[] args) {
 		
-		if (main.instance.hasPermission(sender, "supremekits.delete")) {
-			if (main.instance.deleteKit(args[0])) {
+		if (main.getInstance().hasPermission(sender, "supremekits.delete")) {
+			if (main.getInstance().deleteKit(args[0])) {
 				messenger.sendMessage(MESSAGES.KITS_DELETED.value()
 						.replace("$displayname$", args[0])
 						.replace("$name$", args[0]), sender);
@@ -254,12 +254,12 @@ public class SkCommand implements CommandExecutor {
 	
 	private void get(Player sender, String[] args) {
 		
-		if (main.instance.doesKitExist(args[0])) {
+		if (main.getInstance().doesKitExist(args[0])) {
 			
-			Kit kit = main.instance.getKit(args[0]);
+			Kit kit = main.getInstance().getKit(args[0]);
 			
-			if (main.instance.hasPermission(sender, "supremekits.kit.*") 
-					|| main.instance.hasPermission(sender, kit.getPerm())) {
+			if (main.getInstance().hasPermission(sender, "supremekits.kit.*") 
+					|| main.getInstance().hasPermission(sender, kit.getPerm())) {
 				
 				for (Tameable e : ((Player)sender).getWorld().getEntitiesByClass(Tameable.class)) {
 					if (e.isTamed() && e.getOwner().getUniqueId().equals(sender.getUniqueId())) {
@@ -286,11 +286,11 @@ public class SkCommand implements CommandExecutor {
 	
 	private void set(Player sender, String[] args) {
 
-		if (main.instance.doesKitExist(args[0])) {
+		if (main.getInstance().doesKitExist(args[0])) {
 		
-			Kit kit = main.instance.getKit(args[0]);
+			Kit kit = main.getInstance().getKit(args[0]);
 			
-			if (main.instance.hasPermission(sender, "supremekits.setkit")) {
+			if (main.getInstance().hasPermission(sender, "supremekits.setkit")) {
 				kit.setContents(sender);
 				messenger.sendMessage(MESSAGES.KITS_INVENTORYSET.value()
 						.replace("$displayname$", kit.getDisplayName())
@@ -309,9 +309,9 @@ public class SkCommand implements CommandExecutor {
 	
 	private void list(CommandSender sender) {
 		String msg = MESSAGES.KITS_LIST.value();
-		for (Kit kit : main.instance.getKits()) {
-			if (main.instance.hasPermission(sender, kit.getPerm())
-					|| main.instance.hasPermission(sender, "supremekits.kit.*")) {
+		for (Kit kit : main.getInstance().getKits()) {
+			if (main.getInstance().hasPermission(sender, kit.getPerm())
+					|| main.getInstance().hasPermission(sender, "supremekits.kit.*")) {
 				msg += kit.getDisplayName();
 				msg += "&6, ";
 			}

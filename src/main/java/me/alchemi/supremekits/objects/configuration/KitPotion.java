@@ -1,4 +1,4 @@
-package com.alchemi.supremekits.objects.configuration;
+package me.alchemi.supremekits.objects.configuration;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import com.alchemi.supremekits.Config;
+import me.alchemi.supremekits.Config;
 
 public class KitPotion {
 

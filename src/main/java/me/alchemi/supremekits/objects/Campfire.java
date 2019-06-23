@@ -1,4 +1,4 @@
-package com.alchemi.supremekits.objects;
+package me.alchemi.supremekits.objects;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,12 +24,13 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.alchemi.al.Library;
-import com.alchemi.al.objects.SexyLocation;
-import com.alchemi.supremekits.Config;
-import com.alchemi.supremekits.main;
-import com.alchemi.supremekits.meta.KitMeta;
 import com.rifledluffy.chairs.events.ChairSitEvent;
+
+import me.alchemi.al.objects.handling.SexyLocation;
+import me.alchemi.al.objects.meta.PersistentMeta;
+import me.alchemi.supremekits.Config;
+import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.meta.KitMeta;
 
 public class Campfire {
 
@@ -66,11 +67,11 @@ public class Campfire {
 		}
 		location.add(0, .4, 0);
 		
-		Bukkit.getPluginManager().registerEvents(new CampfireListener(), main.instance);
-		if (main.RFCenabled) Bukkit.getPluginManager().registerEvents(new CampfireChairListener(), main.instance);
+		Bukkit.getPluginManager().registerEvents(new CampfireListener(), main.getInstance());
+		if (main.getInstance().RFCenabled) Bukkit.getPluginManager().registerEvents(new CampfireChairListener(), main.getInstance());
 		
-		tasks[0] = Bukkit.getScheduler().runTaskTimerAsynchronously(main.instance, new Particles(), 0, 5);
-		tasks[1] = Bukkit.getScheduler().runTaskTimerAsynchronously(main.instance, new EntityChecker(), 0, 5);
+		tasks[0] = Bukkit.getScheduler().runTaskTimerAsynchronously(main.getInstance(), new Particles(), 0, 5);
+		tasks[1] = Bukkit.getScheduler().runTaskTimerAsynchronously(main.getInstance(), new EntityChecker(), 0, 5);
 	}
 	
 	public void removeStands() {
@@ -86,17 +87,17 @@ public class Campfire {
 		tasks[1].cancel();
 		
 		SexyLocation sl = SexyLocation.blockSpecific(location);
-		for (String path : main.CAMPFIRES.getValues(false).keySet()) {
+		for (String path : main.getInstance().CAMPFIRES.getValues(false).keySet()) {
 			
-			ConfigurationSection sec = main.CAMPFIRES.getConfigurationSection(path);
+			ConfigurationSection sec = main.getInstance().CAMPFIRES.getConfigurationSection(path);
 			SexyLocation sl2 = new SexyLocation(sec);
 			if (sl.equals(sl2)) {
-				main.CAMPFIRES.set(path, null);
+				main.getInstance().CAMPFIRES.set(path, null);
 			}
 			
 		}
 		try {
-			main.CAMPFIRES.save();
+			main.getInstance().CAMPFIRES.save();
 		} catch (IOException e) {}
 		
 	}
@@ -104,9 +105,9 @@ public class Campfire {
 	public void save() {
 		
 		SexyLocation sl = SexyLocation.blockSpecific(location);
-		main.CAMPFIRES.createSection(String.valueOf(main.CAMPFIRES.getValues(false).size()), sl.getSection().getValues(true));
+		main.getInstance().CAMPFIRES.createSection(String.valueOf(main.getInstance().CAMPFIRES.getValues(false).size()), sl.getSection().getValues(true));
 		try {
-			main.CAMPFIRES.save();
+			main.getInstance().CAMPFIRES.save();
 		} catch (IOException e) {}
 		
 	}
@@ -247,15 +248,15 @@ public class Campfire {
 		private Map<Player, BukkitTask> tasks = new HashMap<Player, BukkitTask>();
 		
 		public CampfireListener() {
-			main.messenger.print("I shall start listening!");
+			main.getInstance().getMessenger().print("I shall start listening!");
 		}
 		
 		@EventHandler
 		public void onPlayerSneak(PlayerToggleSneakEvent e) {
-			if (!Library.hasMeta(e.getPlayer(), KitMeta.class)) return;
+			if (!PersistentMeta.hasMeta(e.getPlayer(), KitMeta.class)) return;
 			
 			if (e.getPlayer().getLocation().distance(location) <= Config.campfireRange) {
-				if (!tasks.containsKey(e.getPlayer())) tasks.put(e.getPlayer(), Bukkit.getScheduler().runTaskTimerAsynchronously(main.instance, new Runnable() {
+				if (!tasks.containsKey(e.getPlayer())) tasks.put(e.getPlayer(), Bukkit.getScheduler().runTaskTimerAsynchronously(main.getInstance(), new Runnable() {
 					
 					int timer = Config.campfireTime;
 					
@@ -267,7 +268,7 @@ public class Campfire {
 						if (e.getPlayer().getLocation().distance(location) > Config.campfireRange || !e.getPlayer().isSneaking()) {
 							cancelTask(e.getPlayer());
 						} else if (timer <= 0) {
-							if (main.instance.hasPermission(e.getPlayer(), "supremekits.campfire.use")) ((Kit) Library.getMeta(e.getPlayer(), KitMeta.class).value()).replenishPotions(e.getPlayer());
+							if (main.getInstance().hasPermission(e.getPlayer(), "supremekits.campfire.use")) ((Kit) PersistentMeta.getMeta(e.getPlayer(), KitMeta.class).value()).replenishPotions(e.getPlayer());
 							cancelTask(e.getPlayer());
 						}
 						
@@ -289,15 +290,15 @@ public class Campfire {
 		private Map<Player, BukkitTask> tasks = new HashMap<Player, BukkitTask>();
 		
 		public CampfireChairListener() {
-			main.messenger.print("I shall start listening from my chair!");
+			main.getInstance().getMessenger().print("I shall start listening from my chair!");
 		}
 		
 		@EventHandler
 		public void onSit(ChairSitEvent e) {
-			if (!Library.hasMeta(e.getPlayer(), KitMeta.class)) return;
+			if (!PersistentMeta.hasMeta(e.getPlayer(), KitMeta.class)) return;
 			
 			if (e.getPlayer().getLocation().distance(location) <= Config.campfireRange) {
-				if (!tasks.containsKey(e.getPlayer())) tasks.put(e.getPlayer(), Bukkit.getScheduler().runTaskTimerAsynchronously(main.instance, new Runnable() {
+				if (!tasks.containsKey(e.getPlayer())) tasks.put(e.getPlayer(), Bukkit.getScheduler().runTaskTimerAsynchronously(main.getInstance(), new Runnable() {
 					
 					int timer = Config.campfireTime;
 					
@@ -308,7 +309,7 @@ public class Campfire {
 						if (e.getPlayer().getLocation().distance(location) > Config.campfireRange || e.getChair().getPlayer() != e.getPlayer()) {
 							cancelTask(e.getPlayer());
 						} else if (timer <= 0) {
-							if (main.instance.hasPermission(e.getPlayer(), "supremekits.campfire.use")) ((Kit) Library.getMeta(e.getPlayer(), KitMeta.class).value()).replenishPotions(e.getPlayer());
+							if (main.getInstance().hasPermission(e.getPlayer(), "supremekits.campfire.use")) ((Kit) PersistentMeta.getMeta(e.getPlayer(), KitMeta.class).value()).replenishPotions(e.getPlayer());
 							cancelTask(e.getPlayer());
 						}
 						

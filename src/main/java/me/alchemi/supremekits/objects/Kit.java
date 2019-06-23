@@ -1,4 +1,4 @@
-package com.alchemi.supremekits.objects;
+package me.alchemi.supremekits.objects;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,13 +15,14 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffect;
 
-import com.alchemi.al.configurations.SexyConfiguration;
-import com.alchemi.supremekits.Config;
-import com.alchemi.supremekits.Config.MESSAGES;
-import com.alchemi.supremekits.main;
-import com.alchemi.supremekits.meta.KitMeta;
-import com.alchemi.supremekits.objects.configuration.KitPotion;
 import com.sun.istack.internal.Nullable;
+
+import me.alchemi.al.configurations.SexyConfiguration;
+import me.alchemi.supremekits.Config;
+import me.alchemi.supremekits.Config.MESSAGES;
+import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.meta.KitMeta;
+import me.alchemi.supremekits.objects.configuration.KitPotion;
 
 public class Kit {
 
@@ -41,7 +42,7 @@ public class Kit {
 	private boolean edited = false;
 	
 	private Kit(Player player, String name, @Nullable String displayName) {
-		configurationFile = new SexyConfiguration(new File(main.KITS_FOLDER, name + ".yml"));
+		configurationFile = SexyConfiguration.loadConfiguration(new File(main.KITS_FOLDER, name + ".yml"));
 		this.name = name.toLowerCase();
 		if (displayName == null) this.displayName = name;
 		else this.displayName = name;
@@ -76,7 +77,6 @@ public class Kit {
 	 * @param file
 	 * @throws FileNotFoundException 
 	 */
-	@SuppressWarnings("unchecked")
 	public Kit(SexyConfiguration file) throws FileNotFoundException {
 		
 		if (file == null || file.getFile() == null || !file.getFile().exists()) {
@@ -130,7 +130,6 @@ public class Kit {
 	/**
 	 * Reload this kit from file
 	 */
-	@SuppressWarnings("unchecked")
 	public void reload() {
 		name = configurationFile.getString("name", "placeholderKit").toLowerCase();
 		displayName = configurationFile.getString("displayName", name);	
@@ -230,8 +229,7 @@ public class Kit {
 			player.addPotionEffect(kp.createEffect());
 		}
 		
-		player.removeMetadata(KitMeta.class.getSimpleName(), main.instance);
-		player.setMetadata(KitMeta.class.getSimpleName(), new KitMeta(this));
+		player.setMetadata(KitMeta.class.getName(), new KitMeta(this));
 		player.updateInventory();
 		
 		for (String cmd : commands) {
@@ -254,7 +252,7 @@ public class Kit {
 			
 			player.updateInventory();
 			
-			main.messenger.sendMessage(MESSAGES.KITS_POTIONSRESTORED.value(), player);
+			main.getInstance().getMessenger().sendMessage(MESSAGES.KITS_POTIONSRESTORED.value(), player);
 			
 		}
 		

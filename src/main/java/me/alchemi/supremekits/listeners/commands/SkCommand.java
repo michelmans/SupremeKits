@@ -12,12 +12,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 
 import me.alchemi.al.configurations.Messenger;
 import me.alchemi.al.configurations.SexyConfiguration;
 import me.alchemi.al.objects.handling.SexyLocation;
-import me.alchemi.supremekits.Config.MESSAGES;
+import me.alchemi.supremekits.Config.Messages;
 import me.alchemi.supremekits.main;
 import me.alchemi.supremekits.objects.Campfire;
 import me.alchemi.supremekits.objects.Kit;
@@ -42,7 +41,7 @@ public class SkCommand implements CommandExecutor {
 		
 		if (command.getName().equals("supremekits")) {
 			if (args.length < 1) {
-//				messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + skCmd.getUsage(), sender);
+//				messenger.sendMessage(Messages.COMMANDS_WRONG_FORMAT.value() + skCmd.getUsage(), sender);
 				list(sender);
 				return true;
 			} else if (args.length == 1) {
@@ -50,13 +49,13 @@ public class SkCommand implements CommandExecutor {
 					list(sender);
 					return true;
 				} else if (Arrays.asList(createAliases).contains(args[0])) {
-					messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + createCmd.getUsage(), sender);
+					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + createCmd.getUsage(), sender);
 					return true; 
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
-					messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + deleteCmd.getUsage(), sender);
+					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + deleteCmd.getUsage(), sender);
 					return true;
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
-					messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + setCmd.getUsage(), sender);
+					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + setCmd.getUsage(), sender);
 					return true;
 				} else if (args[0].equals("reload")) {
 					if (!main.KITS_FOLDER.exists()) {
@@ -108,7 +107,7 @@ public class SkCommand implements CommandExecutor {
 					}
 					
 				} else {
-					messenger.sendMessage(MESSAGES.COMMANDS_UNKNOWN.value(), sender);
+					messenger.sendMessage(Messages.COMMANDS_UNKNOWN.value(), sender);
 					return true;
 				}
 			} else if (args.length >= 2) {
@@ -120,7 +119,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/sk getkit"), sender);
+						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk getkit"), sender);
 					}
 					return true;
 				} else if (Arrays.asList(createAliases).contains(args[0])) {
@@ -130,7 +129,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/sk create"), sender);
+						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk create"), sender);
 					}
 					return true;
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
@@ -145,7 +144,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/sk setkit"), sender);
+						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk setkit"), sender);
 					}
 					return true;
 					
@@ -161,11 +160,11 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
 				return true;
 			}	
 		} else if (command.getName().equals("deletekit")) {
@@ -175,7 +174,7 @@ public class SkCommand implements CommandExecutor {
 				
 				return true;
 			} else {
-				messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
 				return true;
 			}
 		} else if (command.getName().equals("kit")) {
@@ -186,11 +185,11 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
 				return true;
 			}
 		} else if (command.getName().equals("setkitinventory")) {
@@ -201,15 +200,15 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
 				return true;
 			}
 		} else {
-			messenger.sendMessage(MESSAGES.COMMANDS_UNKNOWN.value(), sender);
+			messenger.sendMessage(Messages.COMMANDS_UNKNOWN.value(), sender);
 		}
 		
 		return true;
@@ -220,17 +219,17 @@ public class SkCommand implements CommandExecutor {
 		if (main.getInstance().hasPermission(sender, "supremekits.create")) {
 			Kit newKit = Kit.createKitArgs(sender, args);
 			if (main.getInstance().doesKitExist(newKit)) {
-				messenger.sendMessage(MESSAGES.KITS_EXISTS.value()
+				messenger.sendMessage(Messages.KITS_EXISTS.value()
 						.replace("$displayname$", main.getInstance().getKit(newKit.getName()).getDisplayName())
 						.replace("$name$", newKit.getName()), sender);
 			} else {
 				main.getInstance().newKit(newKit);
-				messenger.sendMessage(MESSAGES.KITS_CREATED.value()
+				messenger.sendMessage(Messages.KITS_CREATED.value()
 						.replace("$displayname$", newKit.getDisplayName())
 						.replace("$name$", newKit.getName()), sender);
 			}
 		} else {
-			messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/createkit"), sender);
+			messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/createkit"), sender);
 		}
 		
 	}
@@ -239,16 +238,16 @@ public class SkCommand implements CommandExecutor {
 		
 		if (main.getInstance().hasPermission(sender, "supremekits.delete")) {
 			if (main.getInstance().deleteKit(args[0])) {
-				messenger.sendMessage(MESSAGES.KITS_DELETED.value()
+				messenger.sendMessage(Messages.KITS_DELETED.value()
 						.replace("$displayname$", args[0])
 						.replace("$name$", args[0]), sender);
 			} else {
-				messenger.sendMessage(MESSAGES.KITS_UNKNOWN.value()
+				messenger.sendMessage(Messages.KITS_UNKNOWN.value()
 						.replace("$displayname$", args[0])
 						.replace("$name$", args[0]), sender);
 			}
 		} else {
-			messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/deletekit"), sender);
+			messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/deletekit"), sender);
 		}
 
 	}
@@ -259,22 +258,10 @@ public class SkCommand implements CommandExecutor {
 			
 			Kit kit = main.getInstance().getKit(args[0]);
 			
-			if (main.getInstance().hasPermission(sender, "supremekits.kit.*") 
-					|| main.getInstance().hasPermission(sender, kit.getPerm())) {
-				
-				for (Tameable e : ((Player)sender).getWorld().getEntitiesByClass(Tameable.class)) {
-					if (e.isTamed() && e.getOwner().getUniqueId().equals(sender.getUniqueId())) {
-						e.remove();
-					}
-				}
-				
-				kit.applyKit(sender);
-			} else {
-				messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/kit " + kit.getName()), sender);
-			}
+			kit.applyKit(sender);
 			
 		} else {
-			messenger.sendMessage(MESSAGES.KITS_UNKNOWN.value()
+			messenger.sendMessage(Messages.KITS_UNKNOWN.value()
 					.replace("$displayname$", args[0])
 					.replace("$name$", args[0]), sender);
 		}
@@ -289,15 +276,15 @@ public class SkCommand implements CommandExecutor {
 			
 			if (main.getInstance().hasPermission(sender, "supremekits.setkit")) {
 				kit.setContents(sender);
-				messenger.sendMessage(MESSAGES.KITS_INVENTORYSET.value()
+				messenger.sendMessage(Messages.KITS_INVENTORYSET.value()
 						.replace("$displayname$", kit.getDisplayName())
 						.replace("$name$", kit.getName()), sender);
 			} else {
-				messenger.sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/setkitinventory"), sender);
+				messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/setkitinventory"), sender);
 			}
 		
 		} else {
-			messenger.sendMessage(MESSAGES.KITS_UNKNOWN.value()
+			messenger.sendMessage(Messages.KITS_UNKNOWN.value()
 					.replace("$displayname$", args[0])
 					.replace("$name$", args[0]), sender);
 		}
@@ -305,7 +292,7 @@ public class SkCommand implements CommandExecutor {
 	}
 	
 	private void list(CommandSender sender) {
-		String msg = MESSAGES.KITS_LIST.value();
+		String msg = Messages.KITS_LIST.value();
 //		List<String> msgs = new ArrayList<String>();
 		for (Kit kit : main.getInstance().getKits()) {
 			

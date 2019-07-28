@@ -7,12 +7,13 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import me.alchemi.al.configurations.Messenger;
-import me.alchemi.supremekits.Config.MESSAGES;
+import me.alchemi.supremekits.Config.Messages;
 import me.alchemi.supremekits.main;
 import me.alchemi.supremekits.objects.Kit;
 import me.alchemi.supremekits.objects.click.AbstractClick;
@@ -30,7 +31,7 @@ public class ClickCommand implements CommandExecutor {
 		if (sender instanceof Player && sender.hasPermission(command.getPermission())) {
 			
 			if (args.length < 2) {
-				sender.sendMessage(Messenger.formatString(MESSAGES.COMMANDS_WRONG_FORMAT.value() + command.getUsage()));
+				sender.sendMessage(Messenger.formatString(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage()));
 				return true;
 			}
 			
@@ -38,7 +39,7 @@ public class ClickCommand implements CommandExecutor {
 			else if (deleteAliases.contains(args[0])) delete(sender, args);
 			else if (modifyAliases.contains(args[0])) modify(sender, args);
 			else {
-				sender.sendMessage(Messenger.formatString(MESSAGES.COMMANDS_WRONG_FORMAT.value() + command.getUsage()));
+				sender.sendMessage(Messenger.formatString(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage()));
 				return true;
 			}
 			
@@ -48,7 +49,7 @@ public class ClickCommand implements CommandExecutor {
 	
 	private void create(CommandSender sender, String[] args) {
 		if (!sender.hasPermission("supremekits.clicker.create")) {
-			sender.sendMessage(Messenger.formatString(MESSAGES.NO_PERMISSION.value()
+			sender.sendMessage(Messenger.formatString(Messages.COMMANDS_NOPERMISSION.value()
 					.replace("$command$", "/clicker create <kit>")));
 			return;
 		}
@@ -57,36 +58,70 @@ public class ClickCommand implements CommandExecutor {
 		Kit kit = main.getInstance().getKit(args[1]);
 		
 		if (ray != null) {
-			new AbstractClick.Factory().loc(
-						ray.getHitBlock() == null ? ray.getHitEntity() == null ? 
-								ray.getHitPosition().toLocation(player.getWorld()) :
-									ray.getHitEntity().getLocation() : ray.getHitBlock().getLocation()
-					).kit(kit).clazz(
-							ray.getHitEntity() == null ? Block.class : NPC.class
-					).create();
+			
+			Location loc;
+			Class<? extends AbstractClick> clazz;
+			
+			if (ray.getHitEntity() != null && ray.getHitEntity() instanceof LivingEntity) {
+				loc = ray.getHitEntity().getLocation();
+				clazz = NPC.class;
+			} else if (ray.getHitBlock() != null) {
+				loc = ray.getHitBlock().getLocation();
+				clazz = Block.class;
+			} else {
+				return;
+			}
+			
+			AbstractClick click = new AbstractClick.Factory().loc(loc).kit(kit).clazz(clazz).create();
+			
+			if (ray.getHitEntity() != null){
+				ray.getHitEntity().setCustomName(Messenger.formatString(kit.getDisplayName()));
+				ray.getHitEntity().setCustomNameVisible(true);
+				((NPC)click).setEntity((LivingEntity) ray.getHitEntity());
+			}
+			main.getInstance().getMessenger().sendMessage(Messages.CLICKER_CREATED.value()
+					.replace("$type$", ray.getHitEntity() == null ? "Block" : "NPC")
+					.replace("$x$", String.valueOf(click.getLoc().getBlockX()))
+					.replace("$y$", String.valueOf(click.getLoc().getBlockY()))
+					.replace("$z$", String.valueOf(click.getLoc().getBlockZ())), sender);
 		}
 	}
 
 	private void delete(CommandSender sender, String[] args) {
 		if (!sender.hasPermission("supremekits.clicker.delete")) {
-			sender.sendMessage(Messenger.formatString(MESSAGES.NO_PERMISSION.value()
+			sender.sendMessage(Messenger.formatString(Messages.COMMANDS_NOPERMISSION.value()
 					.replace("$command$", "/clicker delete <kit>")));
 			return;
 		}
 		Player player = (Player) sender;
 		RayTraceResult ray = getTarget(player);
-		Location loc = ray.getHitBlock() == null ? ray.getHitEntity() == null ? 
-				ray.getHitPosition().toLocation(player.getWorld()) :
-					ray.getHitEntity().getLocation() : ray.getHitBlock().getLocation();
+		Location loc;
 		
-		if (ray != null && AbstractClick.hasClick(loc)) {
-			AbstractClick.getClick(loc).remove();
+		if (ray == null) return;
+		
+		if (ray.getHitEntity() != null && ray.getHitEntity() instanceof LivingEntity) {
+			loc = ray.getHitEntity().getLocation();
+		} else if (ray.getHitBlock() != null) {
+			loc = ray.getHitBlock().getLocation();
+		} else {
+			return;
+		}		
+		if (AbstractClick.hasClick(loc)) {
+			AbstractClick click = AbstractClick.getClick(loc).remove();
+			if (ray.getHitEntity() != null){
+				ray.getHitEntity().setCustomNameVisible(false);
+			}
+			main.getInstance().getMessenger().sendMessage(Messages.CLICKER_REMOVED.value()
+					.replace("$type$", ray.getHitEntity() == null ? "Block" : "NPC")
+					.replace("$x$", String.valueOf(click.getLoc().getBlockX()))
+					.replace("$y$", String.valueOf(click.getLoc().getBlockY()))
+					.replace("$z$", String.valueOf(click.getLoc().getBlockZ())), sender);
 		}
 	}
 
 	private void modify(CommandSender sender, String[] args) {
 		if (!sender.hasPermission("supremekits.clicker.modify")) {
-			sender.sendMessage(Messenger.formatString(MESSAGES.NO_PERMISSION.value()
+			sender.sendMessage(Messenger.formatString(Messages.COMMANDS_NOPERMISSION.value()
 					.replace("$command$", "/clicker modify <kit>")));
 			return;
 		}
@@ -94,14 +129,37 @@ public class ClickCommand implements CommandExecutor {
 		RayTraceResult ray = getTarget(player);
 		Kit kit = main.getInstance().getKit(args[1]);
 		
-		if (ray != null) {
-			new AbstractClick.Factory().loc(
-						ray.getHitBlock() == null ? ray.getHitEntity() == null ? 
-								ray.getHitPosition().toLocation(player.getWorld()) :
-									ray.getHitEntity().getLocation() : ray.getHitBlock().getLocation()
-					).kit(kit).clazz(
-							ray.getHitEntity() == null ? Block.class : NPC.class
-					).create();
+		if (ray != null && kit != null) {
+			
+			Location loc;
+			Class<? extends AbstractClick> clazz;
+			
+			if (ray.getHitEntity() != null && ray.getHitEntity() instanceof LivingEntity) {
+				
+				loc = ray.getHitEntity().getLocation();
+				clazz = NPC.class;
+				
+			} else if (ray.getHitBlock() != null) {
+				loc = ray.getHitBlock().getLocation();
+				clazz = Block.class;
+			} else {
+				return;
+			}
+			
+			AbstractClick click = new AbstractClick.Factory().loc(loc).kit(kit).clazz(clazz).create();
+			
+			if (ray.getHitEntity() != null) {
+				((NPC)click).setEntity((LivingEntity) ray.getHitEntity());
+				ray.getHitEntity().setCustomName(Messenger.formatString(kit.getDisplayName()));
+				ray.getHitEntity().setCustomNameVisible(true);
+			}
+			
+			main.getInstance().getMessenger().sendMessage(Messages.CLICKER_REMOVED.value()
+					.replace("$type$", ray.getHitEntity() == null ? "Block" : "NPC")
+					.replace("$x$", String.valueOf(click.getLoc().getBlockX()))
+					.replace("$y$", String.valueOf(click.getLoc().getBlockY()))
+					.replace("$z$", String.valueOf(click.getLoc().getBlockZ())), sender);
+			
 		}
 	}
 

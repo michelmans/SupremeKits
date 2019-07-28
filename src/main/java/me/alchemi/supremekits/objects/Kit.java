@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.Permission;
@@ -17,9 +17,10 @@ import org.bukkit.potion.PotionEffect;
 
 import com.sun.istack.internal.Nullable;
 
+import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.configurations.SexyConfiguration;
 import me.alchemi.supremekits.Config;
-import me.alchemi.supremekits.Config.MESSAGES;
+import me.alchemi.supremekits.Config.Messages;
 import me.alchemi.supremekits.main;
 import me.alchemi.supremekits.meta.KitMeta;
 import me.alchemi.supremekits.objects.configuration.KitPotion;
@@ -53,7 +54,7 @@ public class Kit {
 		
 		for (ItemStack item : inv.getContents()) {
 			
-			if (Arrays.asList(armourContents).contains(item) || item == null || item.getType() == Material.AIR) continue;
+			if (Arrays.asList(armourContents).contains(item) || item == null || item.getType() == MaterialWrapper.AIR.getMaterial()) continue;
 			
 			inventoryContents.add(item.clone());
 			if (Config.validPotionTypes.contains(item.getType())) potions.add(item.clone());
@@ -100,7 +101,7 @@ public class Kit {
 		if (file.contains("inventory")) {
 			for (ItemStack item : (List<ItemStack>) file.getList("inventory")) {
 				
-				if (item == null || item.getType() == Material.AIR) continue;
+				if (item == null || item.getType() == MaterialWrapper.AIR.getMaterial()) continue;
 				inventoryContents.add(item);
 				if (Config.validPotionTypes.contains(item.getType())) potions.add(item);
 				
@@ -122,6 +123,7 @@ public class Kit {
 		}
 		
 		perm = new Permission("supremekits.kit." + name.toLowerCase());
+		perm.addParent("supremekits.kit.*", true);
 		
 		if (Bukkit.getPluginManager().getPermission(perm.getName()) != null) Bukkit.getPluginManager().addPermission(perm);
 		
@@ -147,7 +149,7 @@ public class Kit {
 		if (configurationFile.contains("inventory")) {
 			for (ItemStack item : (List<ItemStack>) configurationFile.getList("inventory")) {
 				
-				if (item == null || item.getType() == Material.AIR) continue;
+				if (item == null || item.getType() == MaterialWrapper.AIR.getMaterial()) continue;
 				inventoryContents.add(item);
 				if (Config.validPotionTypes.contains(item.getType())) potions.add(item);
 				
@@ -212,33 +214,45 @@ public class Kit {
 	 */
 	public void applyKit(Player player) {
 		
-		PlayerInventory inv = player.getInventory();
-		inv.clear();
-		if (!player.getActivePotionEffects().isEmpty()) {
-			for (PotionEffect pe : player.getActivePotionEffects()) {
-				player.removePotionEffect(pe.getType());
+		if (main.getInstance().hasPermission(player, getPerm())) {
+			
+			for (Tameable e : ((Player)player).getWorld().getEntitiesByClass(Tameable.class)) {
+				if (e.isTamed() && e.getOwner().getUniqueId().equals(player.getUniqueId())) {
+					e.remove();
+				}
 			}
+
+			PlayerInventory inv = player.getInventory();
+			inv.clear();
+			if (!player.getActivePotionEffects().isEmpty()) {
+				for (PotionEffect pe : player.getActivePotionEffects()) {
+					player.removePotionEffect(pe.getType());
+				}
+			}
+			
+			inv.setArmorContents(armourContents);
+			
+			for (ItemStack i : inventoryContents) {
+				inv.addItem(i);
+			}
+			for (KitPotion kp : effects) {
+				player.addPotionEffect(kp.createEffect());
+			}
+			
+			player.setMetadata(KitMeta.class.getName(), new KitMeta(this));
+			player.updateInventory();
+			
+			for (String cmd : commands) {
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", player.getName()));
+			}
+			
+			main.getInstance().getMessenger().sendMessage(Messages.KITS_RECEIVED.value()
+					.replace("$displayname$", getDisplayName())
+					.replace("$name$", getName()), player);
+			
+		} else {
+			main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/kit " + getName()), player);
 		}
-		
-		inv.setArmorContents(armourContents);
-		
-		for (ItemStack i : inventoryContents) {
-			inv.addItem(i);
-		}
-		for (KitPotion kp : effects) {
-			player.addPotionEffect(kp.createEffect());
-		}
-		
-		player.setMetadata(KitMeta.class.getName(), new KitMeta(this));
-		player.updateInventory();
-		
-		for (String cmd : commands) {
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", player.getName()));
-		}
-		
-		main.getInstance().getMessenger().sendMessage(MESSAGES.KITS_RECEIVED.value()
-				.replace("$displayname$", getDisplayName())
-				.replace("$name$", getName()), player);
 	}
 	
 	public void replenishPotions(Player player) {
@@ -256,7 +270,7 @@ public class Kit {
 			
 			player.updateInventory();
 			
-			main.getInstance().getMessenger().sendMessage(MESSAGES.KITS_POTIONSRESTORED.value(), player);
+			main.getInstance().getMessenger().sendMessage(Messages.KITS_POTIONSRESTORED.value(), player);
 			
 		}
 		
@@ -279,7 +293,7 @@ public class Kit {
 		
 		for (ItemStack item : inv.getStorageContents()) {
 			
-			if (Arrays.asList(armourContents).contains(item) || item == null || item.getType().equals(Material.AIR)) continue;
+			if (Arrays.asList(armourContents).contains(item) || item == null || item.getType().equals(MaterialWrapper.AIR.getMaterial())) continue;
 			inventoryContents.add(item.clone());
 			if (Config.validPotionTypes.contains(item.getType())) potions.add(item.clone());
 			

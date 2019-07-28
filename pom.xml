@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.alchemi</groupId>
   <artifactId>SupremeKits</artifactId>
-  <version>1.3.1</version>
+  <version>1.4.0</version>
   <name>SupremeKits</name>
   <build>
     <finalName>${project.name}</finalName>

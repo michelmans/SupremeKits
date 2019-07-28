@@ -10,7 +10,6 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
@@ -26,6 +25,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.rifledluffy.chairs.events.ChairSitEvent;
 
+import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.objects.handling.SexyLocation;
 import me.alchemi.al.objects.meta.PersistentMeta;
 import me.alchemi.supremekits.Config;
@@ -61,7 +61,7 @@ public class Campfire {
 				}
 				armourstands.add(new ArmourStandWrapper(location.clone().add(x2, .4, z2), rotation));
 				armourstands.get(armourstands.size() - 1).notFirePart();
-				armourstands.get(armourstands.size() - 1).getArmourstand().setHelmet(new ItemStack(Material.SKELETON_SKULL));
+				armourstands.get(armourstands.size() - 1).getArmourstand().setHelmet(new ItemStack(MaterialWrapper.SKELETON_SKULL.getMaterial()));
 				armourstands.get(armourstands.size() - 1).getArmourstand().setSmall(true);
 			}
 		}

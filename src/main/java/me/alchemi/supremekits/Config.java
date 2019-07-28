@@ -12,6 +12,7 @@ import java.util.Set;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 
+import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.configurations.SexyConfiguration;
 import me.alchemi.al.objects.base.ConfigBase;
 
@@ -23,7 +24,7 @@ public class Config extends ConfigBase{
 		config = ConfigEnum.CONFIG.getConfig();
 		
 		for (String material : config.getStringList("validPotionTypes")) {
-			validPotionTypes.add(Material.getMaterial(material));
+			validPotionTypes.add(MaterialWrapper.getWrapper(material));
 		}
 		
 		hideEffectParticles = config.getBoolean("hideEffectParticles", true);
@@ -65,25 +66,28 @@ public class Config extends ConfigBase{
 	
 	public static SexyConfiguration config;
 	
-	public static enum MESSAGES implements IMessage{
-		NO_PERMISSION("SupremeKits.Commands.NoPermission"),
-		COMMANDS_WRONG_FORMAT("SupremeKits.Commands.WrongFormat"),
-		COMMANDS_UNKNOWN("SupremeKits.Commands.Unknown"), 
+	public static enum Messages implements IMessage{
+		COMMANDS_NOPERMISSION("SupremeKits.Commands.NoPermission"),
+		COMMANDS_WRONGFORMAT("SupremeKits.Commands.WrongFormat"),
+		COMMANDS_UNKNOWN("SupremeKits.Commands.Unknown"),
 		KITS_UNKNOWN("SupremeKits.Kits.Unknown"),
-		KITS_RECEIVED("SupremeKits.Kits.Received"), 
+		KITS_RECEIVED("SupremeKits.Kits.Received"),
 		KITS_POTIONSRESTORED("SupremeKits.Kits.PotionsRestored"),
-		KITS_CREATED("SupremeKits.Kits.Created"), 
+		KITS_CREATED("SupremeKits.Kits.Created"),
 		KITS_EXISTS("SupremeKits.Kits.Exists"),
-		KITS_DELETED("SupremeKits.Kits.Deleted"), 
+		KITS_DELETED("SupremeKits.Kits.Deleted"),
 		KITS_INVENTORYSET("SupremeKits.Kits.InventorySet"),
 		KITS_LIST("SupremeKits.Kits.List"),
-		CAMP_SET("SupremeKits.Campfire.Set"),
-		CAMP_REMOVED("SupremeKits.Campfire.Removed");
+		CAMPFIRE_SET("SupremeKits.Campfire.Set"),
+		CAMPFIRE_REMOVED("SupremeKits.Campfire.Removed"),
+		CLICKER_CREATED("SupremeKits.Clicker.Created"),
+		CLICKER_REMOVED("SupremeKits.Clicker.Removed"),
+		CLICKER_MODIFIED("SupremeKits.Clicker.Modified");
 
 		String value;
 		String key;
 
-		private MESSAGES(String key) {
+		private Messages(String key) {
 			this.key = key;
 		}
 
@@ -127,7 +131,7 @@ public class Config extends ConfigBase{
 	protected Set<IMessage> getMessages() {
 		return new HashSet<ConfigBase.IMessage>() {
 			{
-				addAll(Arrays.asList(MESSAGES.values()));
+				addAll(Arrays.asList(Messages.values()));
 			}
 		};
 	}

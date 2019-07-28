@@ -20,7 +20,7 @@ import me.alchemi.supremekits.objects.click.AbstractClick;
 
 public class EventListener implements Listener {
 
-	BukkitTask coolTask;
+	private static BukkitTask coolTask;
 	
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
@@ -56,7 +56,7 @@ public class EventListener implements Listener {
 	public void onEntityInteract(PlayerInteractEntityEvent e) {
 	
 		if (AbstractClick.hasClick(e.getRightClicked().getLocation())) {
-			if (coolTask == null) coolTask = Bukkit.getScheduler().runTaskAsynchronously(main.getInstance(), new Runnable() {
+			if (coolTask == null) coolTask = Bukkit.getScheduler().runTask(main.getInstance(), new Runnable() {
 				
 				@Override
 				public void run() {

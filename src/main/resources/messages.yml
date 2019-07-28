@@ -19,3 +19,8 @@ SupremeKits:
   Campfire:
     Set: '&6Campfire set at $x$, $y$, $z$.'
     Removed: '&6Campfire at $x$, $y$, $z$ removed.' 
+  
+  Clicker:
+    Created: '&6$type$ clicker created at $x$, $y$, $z$.'
+    Removed: '&6$type$ clicker at $x$, $y$, $z$ removed.'
+    Modified: '&6Modified $type$ clicker at $x$, $y$, $z$.'

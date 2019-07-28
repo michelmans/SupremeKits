@@ -9,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.alchemi.supremekits.Config.MESSAGES;
+import me.alchemi.supremekits.Config.Messages;
 import me.alchemi.supremekits.main;
 import me.alchemi.supremekits.objects.Campfire;
 
@@ -31,11 +31,11 @@ public class CampfireCommand implements CommandExecutor {
 						remove(sender, Arrays.copyOfRange(args, 1, 4));
 						return true;
 					} else {
-						main.getInstance().getMessenger().sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + command.getUsage(), sender);
+						main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
 						return true;
 					}
 				} else {
-					main.getInstance().getMessenger().sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + command.getUsage(), sender);
+					main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
 					return true;
 				}
 			} else if (command.getName().equals("setcampfire")) {
@@ -45,7 +45,7 @@ public class CampfireCommand implements CommandExecutor {
 				remove(sender, args);
 				return true;
 			} else {	
-				main.getInstance().getMessenger().sendMessage(MESSAGES.COMMANDS_UNKNOWN.value(), sender);
+				main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_UNKNOWN.value(), sender);
 			}
 		}
 		
@@ -71,7 +71,7 @@ public class CampfireCommand implements CommandExecutor {
 				if (sender instanceof Player) main.getInstance().newCamp(new Campfire(new Location(((Player) sender).getWorld(), x, y, z)));
 				else main.getInstance().newCamp(new Campfire(new Location(Bukkit.getWorlds().get(0), x, y, z)));
 				
-				main.getInstance().getMessenger().sendMessage(MESSAGES.CAMP_SET.value()
+				main.getInstance().getMessenger().sendMessage(Messages.CAMPFIRE_SET.value()
 						.replace("$x$", String.valueOf(x))
 						.replace("$y$", String.valueOf(y))
 						.replace("$z$", String.valueOf(z)), sender);
@@ -82,16 +82,16 @@ public class CampfireCommand implements CommandExecutor {
 				double z = ((Player) sender).getLocation().getBlockZ();
 				
 				main.getInstance().newCamp(new Campfire(new Location(((Player) sender).getWorld(), x, y, z)));
-				main.getInstance().getMessenger().sendMessage(MESSAGES.CAMP_SET.value()
+				main.getInstance().getMessenger().sendMessage(Messages.CAMPFIRE_SET.value()
 						.replace("$x$", String.valueOf(x))
 						.replace("$y$", String.valueOf(y))
 						.replace("$z$", String.valueOf(z)), sender);
 				
 			} else {
-				main.getInstance().getMessenger().sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + main.getInstance().getCommand("setcampfire").getUsage(), sender);
+				main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + main.getInstance().getCommand("setcampfire").getUsage(), sender);
 			}
 		} else {
-			main.getInstance().getMessenger().sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/setcampfire"), sender);
+			main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/setcampfire"), sender);
 		}
 	}
 	
@@ -114,7 +114,7 @@ public class CampfireCommand implements CommandExecutor {
 				if (sender instanceof Player) main.getInstance().deleteCamp(new Location(((Player) sender).getWorld(), x, y, z));
 				else main.getInstance().deleteCamp(new Location(Bukkit.getWorlds().get(0), x, y, z));
 				
-				main.getInstance().getMessenger().sendMessage(MESSAGES.CAMP_REMOVED.value()
+				main.getInstance().getMessenger().sendMessage(Messages.CAMPFIRE_REMOVED.value()
 						.replace("$x$", String.valueOf(x))
 						.replace("$y$", String.valueOf(y))
 						.replace("$z$", String.valueOf(z)), sender);
@@ -125,16 +125,16 @@ public class CampfireCommand implements CommandExecutor {
 				double z = ((Player) sender).getLocation().getBlockZ();
 				
 				main.getInstance().deleteCamp(new Location(((Player) sender).getWorld(), x, y, z));
-				main.getInstance().getMessenger().sendMessage(MESSAGES.CAMP_REMOVED.value()
+				main.getInstance().getMessenger().sendMessage(Messages.CAMPFIRE_REMOVED.value()
 						.replace("$x$", String.valueOf(x))
 						.replace("$y$", String.valueOf(y))
 						.replace("$z$", String.valueOf(z)), sender);
 				
 			} else {
-				main.getInstance().getMessenger().sendMessage(MESSAGES.COMMANDS_WRONG_FORMAT.value() + main.getInstance().getCommand("removecampfire").getUsage(), sender);
+				main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + main.getInstance().getCommand("removecampfire").getUsage(), sender);
 			}
 		} else {
-			main.getInstance().getMessenger().sendMessage(MESSAGES.NO_PERMISSION.value().replace("$command$", "/removecampfire"), sender);
+			main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/removecampfire"), sender);
 		}
 	}
 

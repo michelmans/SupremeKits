@@ -1,11 +1,13 @@
 package me.alchemi.supremekits.objects.click;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -32,6 +34,11 @@ public abstract class AbstractClick {
 	protected Kit kit;
 	
 	protected AbstractClick(Location loc, Kit kit, Class<? extends AbstractClick> clazz) {
+		Validate.notNull(loc, "Location cannot be null!");
+		Validate.notNull(kit, "Kit cannot be null!");
+		Validate.notNull(clazz, "Class cannot be null!");
+		Validate.notNull(loc.getWorld(), "World cannot be null! ");
+		
 		this.vector = properVector(loc.toVector());
 		this.world = loc.getWorld();
 		this.kit = kit;
@@ -76,9 +83,10 @@ public abstract class AbstractClick {
 		return kit;
 	}
 
-	public final void remove() {
+	public final AbstractClick remove() {
 		configuration.set(toID(getLoc()), null);
 		registry.remove(vector);
+		return this;
 	}
 
 	/**
@@ -115,6 +123,13 @@ public abstract class AbstractClick {
 		throw new IllegalArgumentException();
 	}
 	
+	public static void reload() {
+		for (AbstractClick click : registry.values()) {
+			click.remove();
+		}
+		loadClickers();
+	}
+	
 	protected static void removeClick(Location loc) {
 		if (registry.containsKey(properVector(loc.toVector()))) {
 			registry.remove(properVector(loc.toVector()));
@@ -124,6 +139,7 @@ public abstract class AbstractClick {
 	}
 	
 	protected static String toID(Location loc) {
+		
 		return loc.getWorld().getName() + "-" + loc.getBlockX() + "-" + loc.getBlockY() + "-" + loc.getBlockZ();
 	}
 	
@@ -189,6 +205,14 @@ public abstract class AbstractClick {
 				
 			}
 			
+		} catch (FileNotFoundException e) {
+			
+			try {
+				configuration.getFile().createNewFile();
+					
+				}
+			catch (IOException e1) {}
+		
 		} catch (IOException | InvalidConfigurationException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

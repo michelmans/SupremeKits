@@ -2,6 +2,7 @@ package me.alchemi.supremekits.objects.click;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,10 +23,26 @@ public class NPC extends AbstractClick implements Listener{
 	
 	public NPC(Location loc, Kit kit) {
 		super(loc, kit, NPC.class);
-				
+		
 		inv.setContents(kit.getArmourContents());
 		inv.addItem(kit.getInventoryContents().toArray(new ItemStack[kit.getInventoryContents().size()]));
+		detectEntity();
 		Bukkit.getPluginManager().registerEvents(this, main.getInstance());
+	}
+	
+	public void detectEntity() {
+		for (LivingEntity le : world.getLivingEntities()) {
+			if (le.getType().name().equals(section.get("entity", ""))
+					&& properVector(le.getLocation().toVector()).equals(vector)) {
+				le.setCustomName(Messenger.formatString(kit.getDisplayName()));
+				le.setCustomNameVisible(true);
+			}
+		}
+	}
+	
+	public void setEntity(LivingEntity entity) {
+		section.set("entity", entity.getType().name());
+		save();
 	}
 
 	@Override

@@ -24,7 +24,9 @@ import me.alchemi.supremekits.Config.Messages;
 import me.alchemi.supremekits.main;
 import me.alchemi.supremekits.meta.KitMeta;
 import me.alchemi.supremekits.objects.configuration.KitPotion;
+import me.alchemi.supremekits.objects.placeholders.Stringer;
 
+@SuppressWarnings({"unchecked", "restriction"})
 public class Kit {
 
 	private ItemStack[] armourContents = new ItemStack[4];
@@ -37,6 +39,7 @@ public class Kit {
 	private final SexyConfiguration configurationFile;
 	private String name;
 	private String displayName;
+	private String kitDenyMessage;
 	
 	private final Permission perm;
 	
@@ -47,6 +50,8 @@ public class Kit {
 		this.name = name.toLowerCase();
 		if (displayName == null) this.displayName = name;
 		else this.displayName = name;
+		
+		setKitDenyMessage(configurationFile.getString("deny-message", "&4You're not allowed to use this kit."));
 		
 		PlayerInventory inv = player.getInventory();
 		
@@ -87,6 +92,7 @@ public class Kit {
 		configurationFile = file;
 		name = file.getString("name", "placeholderKit").toLowerCase();
 		displayName = file.getString("displayName", name);	
+		setKitDenyMessage(file.getString("deny-message", "&4You're not allowed to use this kit."));
 	
 		if (file.contains("effects")) {
 			
@@ -135,7 +141,8 @@ public class Kit {
 	public void reload() {
 		name = configurationFile.getString("name", "placeholderKit").toLowerCase();
 		displayName = configurationFile.getString("displayName", name);	
-	
+		setKitDenyMessage(configurationFile.getString("deny-message", "&4You're not allowed to use this kit."));
+		
 		if (configurationFile.contains("effects")) {
 			
 			for (String sec : configurationFile.getConfigurationSection("effects").getValues(false).keySet()) {
@@ -246,12 +253,15 @@ public class Kit {
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("%player%", player.getName()));
 			}
 			
-			main.getInstance().getMessenger().sendMessage(Messages.KITS_RECEIVED.value()
-					.replace("$displayname$", getDisplayName())
-					.replace("$name$", getName()), player);
+			main.getInstance().getMessenger().sendMessage(new Stringer(Messages.KITS_RECEIVED)
+					.player(player)
+					.kit(this), player);
 			
 		} else {
-			main.getInstance().getMessenger().sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/kit " + getName()), player);
+			main.getInstance().getMessenger().sendMessage(new Stringer(kitDenyMessage)
+					.player(player)
+					.command("/kit " + getName())
+					.kit(this), player);
 		}
 	}
 	
@@ -315,6 +325,7 @@ public class Kit {
 	public void save() {
 		configurationFile.set("name", name);
 		configurationFile.set("displayName", displayName);
+		configurationFile.set("deny-message", kitDenyMessage);
 		
 		configurationFile.createSection("armour");
 		configurationFile.set("armour.helmet", armourContents[0]);
@@ -427,6 +438,14 @@ public class Kit {
 	 */
 	public boolean isEdited() {
 		return edited;
+	}
+
+	public String getKitDenyMessage() {
+		return kitDenyMessage;
+	}
+
+	public void setKitDenyMessage(String kitDenyMessage) {
+		this.kitDenyMessage = kitDenyMessage;
 	}
 	
 }

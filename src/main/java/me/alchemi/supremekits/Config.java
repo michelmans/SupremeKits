@@ -36,7 +36,7 @@ public class Config extends ConfigBase{
 
 	public static enum ConfigEnum implements IConfigEnum{
 		CONFIG(new File(main.getInstance().getDataFolder(), "config.yml"), 1),
-		MESSAGES(new File(main.getInstance().getDataFolder(), "messages.yml"), 2);
+		MESSAGES(new File(main.getInstance().getDataFolder(), "messages.yml"), 3);
 
 		final File file;
 		final int version;

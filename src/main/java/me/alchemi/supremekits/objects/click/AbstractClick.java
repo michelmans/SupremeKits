@@ -190,6 +190,7 @@ public abstract class AbstractClick {
 		return bv;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void loadClickers() {
 		try {
 			configuration.load();

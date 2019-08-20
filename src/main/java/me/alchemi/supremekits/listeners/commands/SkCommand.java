@@ -20,6 +20,7 @@ import me.alchemi.supremekits.Config.Messages;
 import me.alchemi.supremekits.main;
 import me.alchemi.supremekits.objects.Campfire;
 import me.alchemi.supremekits.objects.Kit;
+import me.alchemi.supremekits.objects.placeholders.Stringer;
 
 public class SkCommand implements CommandExecutor {
 
@@ -49,13 +50,13 @@ public class SkCommand implements CommandExecutor {
 					list(sender);
 					return true;
 				} else if (Arrays.asList(createAliases).contains(args[0])) {
-					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + createCmd.getUsage(), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(createCmd.getUsage()), sender);
 					return true; 
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
-					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + deleteCmd.getUsage(), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(deleteCmd.getUsage()), sender);
 					return true;
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
-					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + setCmd.getUsage(), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(setCmd.getUsage()), sender);
 					return true;
 				} else if (args[0].equals("reload")) {
 					if (!main.KITS_FOLDER.exists()) {
@@ -119,7 +120,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk getkit"), sender);
+						messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/sk getkit"), sender);
 					}
 					return true;
 				} else if (Arrays.asList(createAliases).contains(args[0])) {
@@ -129,7 +130,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk create"), sender);
+						messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/sk create"), sender);
 					}
 					return true;
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
@@ -144,7 +145,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk setkit"), sender);
+						messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/sk setkit"), sender);
 					}
 					return true;
 					
@@ -160,11 +161,11 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command(command.getName()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				return true;
 			}	
 		} else if (command.getName().equals("deletekit")) {
@@ -174,7 +175,7 @@ public class SkCommand implements CommandExecutor {
 				
 				return true;
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				return true;
 			}
 		} else if (command.getName().equals("kit")) {
@@ -185,11 +186,11 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				return true;
 			}
 		} else if (command.getName().equals("setkitinventory")) {
@@ -200,11 +201,11 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command(command.getName()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				return true;
 			}
 		} else {
@@ -219,17 +220,19 @@ public class SkCommand implements CommandExecutor {
 		if (main.getInstance().hasPermission(sender, "supremekits.create")) {
 			Kit newKit = Kit.createKitArgs(sender, args);
 			if (main.getInstance().doesKitExist(newKit)) {
-				messenger.sendMessage(Messages.KITS_EXISTS.value()
-						.replace("$displayname$", main.getInstance().getKit(newKit.getName()).getDisplayName())
-						.replace("$name$", newKit.getName()), sender);
+				messenger.sendMessage(new Stringer(Messages.KITS_EXISTS)
+						.player(sender)
+						.kit(newKit)
+						.kitname(newKit), sender);
 			} else {
 				main.getInstance().newKit(newKit);
-				messenger.sendMessage(Messages.KITS_CREATED.value()
-						.replace("$displayname$", newKit.getDisplayName())
-						.replace("$name$", newKit.getName()), sender);
+				messenger.sendMessage(new Stringer(Messages.KITS_CREATED)
+						.kit(newKit)
+						.kitname(newKit)
+						.player(sender), sender);
 			}
 		} else {
-			messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/createkit"), sender);
+			messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/createkit"), sender);
 		}
 		
 	}
@@ -238,16 +241,16 @@ public class SkCommand implements CommandExecutor {
 		
 		if (main.getInstance().hasPermission(sender, "supremekits.delete")) {
 			if (main.getInstance().deleteKit(args[0])) {
-				messenger.sendMessage(Messages.KITS_DELETED.value()
-						.replace("$displayname$", args[0])
-						.replace("$name$", args[0]), sender);
+				messenger.sendMessage(new Stringer(Messages.KITS_DELETED)
+						.kit(args[0])
+						.kitname(args[0]), sender);
 			} else {
-				messenger.sendMessage(Messages.KITS_UNKNOWN.value()
-						.replace("$displayname$", args[0])
-						.replace("$name$", args[0]), sender);
+				messenger.sendMessage(new Stringer(Messages.KITS_UNKNOWN)
+						.kit(args[0])
+						.kitname(args[0]), sender);
 			}
 		} else {
-			messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/deletekit"), sender);
+			messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/deletekit"), sender);
 		}
 
 	}
@@ -261,9 +264,9 @@ public class SkCommand implements CommandExecutor {
 			kit.applyKit(sender);
 			
 		} else {
-			messenger.sendMessage(Messages.KITS_UNKNOWN.value()
-					.replace("$displayname$", args[0])
-					.replace("$name$", args[0]), sender);
+			messenger.sendMessage(new Stringer(Messages.KITS_UNKNOWN)
+					.kit(args[0])
+					.kitname(args[0]), sender);
 		}
 		
 	}
@@ -276,17 +279,17 @@ public class SkCommand implements CommandExecutor {
 			
 			if (main.getInstance().hasPermission(sender, "supremekits.setkit")) {
 				kit.setContents(sender);
-				messenger.sendMessage(Messages.KITS_INVENTORYSET.value()
-						.replace("$displayname$", kit.getDisplayName())
-						.replace("$name$", kit.getName()), sender);
+				messenger.sendMessage(new Stringer(Messages.KITS_INVENTORYSET)
+						.kit(kit)
+						.kitname(kit), sender);
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/setkitinventory"), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/setkitinventory"), sender);
 			}
 		
 		} else {
-			messenger.sendMessage(Messages.KITS_UNKNOWN.value()
-					.replace("$displayname$", args[0])
-					.replace("$name$", args[0]), sender);
+			messenger.sendMessage(new Stringer(Messages.KITS_UNKNOWN)
+					.kit(args[0])
+					.kitname(args[0]), sender);
 		}
 
 	}

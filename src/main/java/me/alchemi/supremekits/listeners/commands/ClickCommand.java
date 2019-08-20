@@ -14,7 +14,7 @@ import org.bukkit.util.Vector;
 
 import me.alchemi.al.configurations.Messenger;
 import me.alchemi.supremekits.Config.Messages;
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.objects.Kit;
 import me.alchemi.supremekits.objects.click.AbstractClick;
 import me.alchemi.supremekits.objects.click.Block;
@@ -58,7 +58,7 @@ public class ClickCommand implements CommandExecutor {
 		}
 		Player player = (Player) sender;
 		RayTraceResult ray = getTarget(player);
-		Kit kit = main.getInstance().getKit(args[1]);
+		Kit kit = Supreme.getInstance().getKit(args[1]);
 		
 		if (ray != null) {
 			
@@ -83,7 +83,7 @@ public class ClickCommand implements CommandExecutor {
 				((NPC)click).setEntity((LivingEntity) ray.getHitEntity());
 			}
 			
-			main.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_CREATED)
+			Supreme.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_CREATED)
 					.type(ray.getHitEntity() == null ? "Block" : "NPC")
 					.x(click.getLoc().getBlockX())
 					.y(click.getLoc().getBlockY())
@@ -117,7 +117,7 @@ public class ClickCommand implements CommandExecutor {
 			if (ray.getHitEntity() != null){
 				ray.getHitEntity().setCustomNameVisible(false);
 			}
-			main.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_REMOVED)
+			Supreme.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_REMOVED)
 					.type(ray.getHitEntity() == null ? "Block" : "NPC")
 					.x(click.getLoc().getBlockX())
 					.y(click.getLoc().getBlockY())
@@ -135,7 +135,7 @@ public class ClickCommand implements CommandExecutor {
 		}
 		Player player = (Player) sender;
 		RayTraceResult ray = getTarget(player);
-		Kit kit = main.getInstance().getKit(args[1]);
+		Kit kit = Supreme.getInstance().getKit(args[1]);
 		
 		if (ray != null && kit != null) {
 			
@@ -162,7 +162,7 @@ public class ClickCommand implements CommandExecutor {
 				ray.getHitEntity().setCustomNameVisible(true);
 			}
 			
-			main.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_MODIFIED)
+			Supreme.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_MODIFIED)
 					.type(ray.getHitEntity() == null ? "Block" : "NPC")
 					.x(click.getLoc().getBlockX())
 					.y(click.getLoc().getBlockY())

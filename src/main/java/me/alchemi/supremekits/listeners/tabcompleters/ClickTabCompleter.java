@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.objects.Kit;
 
 public class ClickTabCompleter implements TabCompleter {
@@ -30,7 +30,7 @@ public class ClickTabCompleter implements TabCompleter {
 				
 		} else if (args.length == 2) {
 			
-			for (Kit kit : main.getInstance().getKits()) {
+			for (Kit kit : Supreme.getInstance().getKits()) {
 				list.add(kit.getName());
 			}
 			

@@ -19,7 +19,7 @@ import me.alchemi.al.objects.base.ConfigBase;
 public class Config extends ConfigBase{
 
 	public Config() throws FileNotFoundException, IOException, InvalidConfigurationException {
-		super(main.getInstance());
+		super(Supreme.getInstance());
 		
 		config = ConfigEnum.CONFIG.getConfig();
 		
@@ -35,8 +35,8 @@ public class Config extends ConfigBase{
 	}
 
 	public static enum ConfigEnum implements IConfigEnum{
-		CONFIG(new File(main.getInstance().getDataFolder(), "config.yml"), 1),
-		MESSAGES(new File(main.getInstance().getDataFolder(), "messages.yml"), 3);
+		CONFIG(new File(Supreme.getInstance().getDataFolder(), "config.yml"), 1),
+		MESSAGES(new File(Supreme.getInstance().getDataFolder(), "messages.yml"), 3);
 
 		final File file;
 		final int version;

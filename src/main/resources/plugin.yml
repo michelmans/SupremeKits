@@ -1,5 +1,5 @@
 name: SupremeKits
-main: me.alchemi.supremekits.main
+main: me.alchemi.supremekits.Supreme
 version: ${project.version}
 api-version: 1.13
 author: Alchemi

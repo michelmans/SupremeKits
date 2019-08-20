@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.listeners.commands.CampfireCommand;
 
 public class CampfireTabCompleter implements TabCompleter {
@@ -26,14 +26,14 @@ public class CampfireTabCompleter implements TabCompleter {
 		
 		if (args.length == 1 && command.getName().equals("campfire")) {
 			
-			if (main.getInstance().hasPermission(sender, "supremekits.campfire.set")) list.add("set");
-			if (main.getInstance().hasPermission(sender, "supremekits.campfire.remove")) list.add("remove");
+			if (Supreme.getInstance().hasPermission(sender, "supremekits.campfire.set")) list.add("set");
+			if (Supreme.getInstance().hasPermission(sender, "supremekits.campfire.remove")) list.add("remove");
 				
 		} else if (args.length >= 2 && command.getName().equals("campfire")) {
 			
-			if ((main.getInstance().hasPermission(sender, "supremekits.campfire.set") 
+			if ((Supreme.getInstance().hasPermission(sender, "supremekits.campfire.set") 
 					&& Arrays.asList(CampfireCommand.setAliases).contains(args[0]))
-					|| (main.getInstance().hasPermission(sender, "supremekits.campfire.remove") 
+					|| (Supreme.getInstance().hasPermission(sender, "supremekits.campfire.remove") 
 							&& Arrays.asList(CampfireCommand.removeAliases).contains(args[0]))) {
 				Block target = ((Player)sender).getTargetBlockExact(5);
 				if (args.length == 2 && target != null) {
@@ -50,8 +50,8 @@ public class CampfireTabCompleter implements TabCompleter {
 			}
 			
 		} else if (args.length == 1) {
-			if ((command.getName().equals("setcampfire") && main.getInstance().hasPermission(sender, "supremekits.campfire.set")
-					|| (command.getName().equals("removecampfire") && main.getInstance().hasPermission(sender, "supremekits.campfire.remove"))) ) {
+			if ((command.getName().equals("setcampfire") && Supreme.getInstance().hasPermission(sender, "supremekits.campfire.set")
+					|| (command.getName().equals("removecampfire") && Supreme.getInstance().hasPermission(sender, "supremekits.campfire.remove"))) ) {
 				Block target = ((Player)sender).getTargetBlockExact(5);
 				if (args.length == 1 && target != null) {
 					list.add(String.valueOf(target.getX()));

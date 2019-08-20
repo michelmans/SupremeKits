@@ -13,7 +13,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import me.alchemi.al.configurations.Messenger;
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.objects.Kit;
 
 public class Block extends AbstractClick implements Listener {
@@ -25,7 +25,7 @@ public class Block extends AbstractClick implements Listener {
 		
 		inv.setContents(kit.getArmourContents());
 		inv.addItem(kit.getInventoryContents().toArray(new ItemStack[kit.getInventoryContents().size()]));
-		Bukkit.getPluginManager().registerEvents(this, main.getInstance());
+		Bukkit.getPluginManager().registerEvents(this, Supreme.getInstance());
 	}
 	
 	@Override

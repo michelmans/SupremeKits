@@ -18,12 +18,12 @@ import org.bukkit.util.BlockVector;
 import org.bukkit.util.Vector;
 
 import me.alchemi.al.configurations.SexyConfiguration;
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.objects.Kit;
 
 public abstract class AbstractClick {
 
-	private static final SexyConfiguration configuration = SexyConfiguration.loadConfiguration(new File(main.getInstance().getDataFolder(), "locations.yml"));
+	private static final SexyConfiguration configuration = SexyConfiguration.loadConfiguration(new File(Supreme.getInstance().getDataFolder(), "locations.yml"));
 	
 	protected static final Map<BlockVector, AbstractClick> registry = new HashMap<BlockVector, AbstractClick>();
 	
@@ -199,7 +199,7 @@ public abstract class AbstractClick {
 				String[] split = sec.split("-");
 				
 				Location l = new Location(Bukkit.getWorld(split[0]), Double.valueOf(split[1]), Double.valueOf(split[2]), Double.valueOf(split[3]));
-				Kit kit = main.getInstance().getKit(configuration.getString(sec + ".kit"));
+				Kit kit = Supreme.getInstance().getKit(configuration.getString(sec + ".kit"));
 				Class<? extends AbstractClick> clazz = (Class<? extends AbstractClick>) Class.forName(configuration.getString(sec + ".class"));
 				
 				new Factory().loc(l).kit(kit).clazz(clazz).create();

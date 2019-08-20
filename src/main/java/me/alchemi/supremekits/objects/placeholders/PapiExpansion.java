@@ -6,7 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import me.alchemi.al.objects.meta.PersistentMeta;
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.meta.KitMeta;
 import me.alchemi.supremekits.objects.Kit;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -25,12 +25,12 @@ public class PapiExpansion extends PlaceholderExpansion{
 
 	@Override
 	public String getIdentifier() {
-		return main.getInstance().getName();
+		return Supreme.getInstance().getName();
 	}
 
 	@Override
 	public String getVersion() {
-		return main.getInstance().getDescription().getVersion();
+		return Supreme.getInstance().getDescription().getVersion();
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class PapiExpansion extends PlaceholderExpansion{
 		if (id.equals("kit")) {
 			return PersistentMeta.hasMeta(p, KitMeta.class) ? ((Kit)PersistentMeta.getMeta(p, KitMeta.class).value()).getDisplayName() : "null";
 		} else if (id.equals("kits")) {
-			return main.getInstance().getKits().stream().map(Kit -> Kit.getDisplayName()).collect(Collectors.toList()).toString().replace("[", "").replace("]", "");
+			return Supreme.getInstance().getKits().stream().map(Kit -> Kit.getDisplayName()).collect(Collectors.toList()).toString().replace("[", "").replace("]", "");
 		}
 		
 		return null;
@@ -53,7 +53,7 @@ public class PapiExpansion extends PlaceholderExpansion{
 	@Override
 	public String onRequest(OfflinePlayer p, String id) {
 		if (id.equals("kits")) {
-			return main.getInstance().getKits().stream().map(Kit -> Kit.getDisplayName()).collect(Collectors.toList()).toString().replace("[", "").replace("]", "");
+			return Supreme.getInstance().getKits().stream().map(Kit -> Kit.getDisplayName()).collect(Collectors.toList()).toString().replace("[", "").replace("]", "");
 		}
 		return null;
 	}

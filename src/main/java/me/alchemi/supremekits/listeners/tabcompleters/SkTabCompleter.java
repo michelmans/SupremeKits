@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.listeners.commands.SkCommand;
 import me.alchemi.supremekits.objects.Kit;
 
@@ -26,43 +26,43 @@ public class SkTabCompleter implements TabCompleter {
 		
 		if (args.length == 1 && command.getName().equals("supremekits")) {
 			
-			if (main.getInstance().hasPermission(sender, "supremekits.createkit")) list.add("create");
+			if (Supreme.getInstance().hasPermission(sender, "supremekits.createkit")) list.add("create");
 			list.add("getkit");
-			if (main.getInstance().hasPermission(sender, "supremekits.deletekit")) list.add("delete");
+			if (Supreme.getInstance().hasPermission(sender, "supremekits.deletekit")) list.add("delete");
 			list.add("list");
-			if (main.getInstance().hasPermission(sender, "supremekits.setkit")) list.add("setkit");
-			if (main.getInstance().hasPermission(sender, "supremekits.save")) list.add("save");
-			if (main.getInstance().hasPermission(sender, "supremekits.reload")) list.add("reload");
+			if (Supreme.getInstance().hasPermission(sender, "supremekits.setkit")) list.add("setkit");
+			if (Supreme.getInstance().hasPermission(sender, "supremekits.save")) list.add("save");
+			if (Supreme.getInstance().hasPermission(sender, "supremekits.reload")) list.add("reload");
 				
 		} else if (args.length == 2 && command.getName().equals("supremekits")) {
 			
-			if (Arrays.asList(SkCommand.deleteAliases).contains(args[0]) && main.getInstance().hasPermission(sender, "supremekits.deletekit")) {
-				for (Kit kit : main.getInstance().getKits()) {
+			if (Arrays.asList(SkCommand.deleteAliases).contains(args[0]) && Supreme.getInstance().hasPermission(sender, "supremekits.deletekit")) {
+				for (Kit kit : Supreme.getInstance().getKits()) {
 					list.add(kit.getName());
 				}
 			} else if (Arrays.asList(SkCommand.getAliases).contains(args[0])) {
-				for (Kit kit : main.getInstance().getKits()) {
-					if (main.getInstance().hasPermission(sender, "supremekits.kit.*") || 
-							main.getInstance().hasPermission(sender, kit.getPerm())) list.add(kit.getName());
+				for (Kit kit : Supreme.getInstance().getKits()) {
+					if (Supreme.getInstance().hasPermission(sender, "supremekits.kit.*") || 
+							Supreme.getInstance().hasPermission(sender, kit.getPerm())) list.add(kit.getName());
 				}
-			} else if (Arrays.asList(SkCommand.setAliases).contains(args[0]) && main.getInstance().hasPermission(sender, "supremekits.setkit")) {
-				for (Kit kit : main.getInstance().getKits()) {
+			} else if (Arrays.asList(SkCommand.setAliases).contains(args[0]) && Supreme.getInstance().hasPermission(sender, "supremekits.setkit")) {
+				for (Kit kit : Supreme.getInstance().getKits()) {
 					list.add(kit.getName());
 				}
 			}
 			
 		} else if (args.length == 1) {
-			if (command.getName().equals("deletekit") && main.getInstance().hasPermission(sender, "supremekits.deletekit")) {
-				for (Kit kit : main.getInstance().getKits()) {
+			if (command.getName().equals("deletekit") && Supreme.getInstance().hasPermission(sender, "supremekits.deletekit")) {
+				for (Kit kit : Supreme.getInstance().getKits()) {
 					list.add(kit.getName());
 				}
 			} else if (command.getName().equals("kit")) {
-				for (Kit kit : main.getInstance().getKits()) {
-					if (main.getInstance().hasPermission(sender, "supremekits.kit.*") || 
-							main.getInstance().hasPermission(sender, kit.getPerm())) list.add(kit.getName());
+				for (Kit kit : Supreme.getInstance().getKits()) {
+					if (Supreme.getInstance().hasPermission(sender, "supremekits.kit.*") || 
+							Supreme.getInstance().hasPermission(sender, kit.getPerm())) list.add(kit.getName());
 				}
-			} else if (command.getName().equals("setkitinventory") && main.getInstance().hasPermission(sender, "supremekits.setkit")) {
-				for (Kit kit : main.getInstance().getKits()) {
+			} else if (command.getName().equals("setkitinventory") && Supreme.getInstance().hasPermission(sender, "supremekits.setkit")) {
+				for (Kit kit : Supreme.getInstance().getKits()) {
 					list.add(kit.getName());
 				}
 			}

@@ -29,7 +29,7 @@ import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.objects.handling.SexyLocation;
 import me.alchemi.al.objects.meta.PersistentMeta;
 import me.alchemi.supremekits.Config;
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.meta.KitMeta;
 
 public class Campfire {
@@ -67,11 +67,11 @@ public class Campfire {
 		}
 		location.add(0, .4, 0);
 		
-		Bukkit.getPluginManager().registerEvents(new CampfireListener(), main.getInstance());
-		if (main.getInstance().RFCenabled) Bukkit.getPluginManager().registerEvents(new CampfireChairListener(), main.getInstance());
+		Bukkit.getPluginManager().registerEvents(new CampfireListener(), Supreme.getInstance());
+		if (Supreme.getInstance().RFCenabled) Bukkit.getPluginManager().registerEvents(new CampfireChairListener(), Supreme.getInstance());
 		
-		tasks[0] = Bukkit.getScheduler().runTaskTimerAsynchronously(main.getInstance(), new Particles(), 0, 5);
-		tasks[1] = Bukkit.getScheduler().runTaskTimerAsynchronously(main.getInstance(), new EntityChecker(), 0, 5);
+		tasks[0] = Bukkit.getScheduler().runTaskTimerAsynchronously(Supreme.getInstance(), new Particles(), 0, 5);
+		tasks[1] = Bukkit.getScheduler().runTaskTimerAsynchronously(Supreme.getInstance(), new EntityChecker(), 0, 5);
 	}
 	
 	public void removeStands() {
@@ -87,17 +87,17 @@ public class Campfire {
 		tasks[1].cancel();
 		
 		SexyLocation sl = SexyLocation.blockSpecific(location);
-		for (String path : main.getInstance().CAMPFIRES.getValues(false).keySet()) {
+		for (String path : Supreme.getInstance().CAMPFIRES.getValues(false).keySet()) {
 			
-			ConfigurationSection sec = main.getInstance().CAMPFIRES.getConfigurationSection(path);
+			ConfigurationSection sec = Supreme.getInstance().CAMPFIRES.getConfigurationSection(path);
 			SexyLocation sl2 = new SexyLocation(sec);
 			if (sl.equals(sl2)) {
-				main.getInstance().CAMPFIRES.set(path, null);
+				Supreme.getInstance().CAMPFIRES.set(path, null);
 			}
 			
 		}
 		try {
-			main.getInstance().CAMPFIRES.save();
+			Supreme.getInstance().CAMPFIRES.save();
 		} catch (IOException e) {}
 		
 	}
@@ -105,9 +105,9 @@ public class Campfire {
 	public void save() {
 		
 		SexyLocation sl = SexyLocation.blockSpecific(location);
-		main.getInstance().CAMPFIRES.createSection(String.valueOf(main.getInstance().CAMPFIRES.getValues(false).size()), sl.getSection().getValues(true));
+		Supreme.getInstance().CAMPFIRES.createSection(String.valueOf(Supreme.getInstance().CAMPFIRES.getValues(false).size()), sl.getSection().getValues(true));
 		try {
-			main.getInstance().CAMPFIRES.save();
+			Supreme.getInstance().CAMPFIRES.save();
 		} catch (IOException e) {}
 		
 	}
@@ -248,7 +248,7 @@ public class Campfire {
 		private Map<Player, BukkitTask> tasks = new HashMap<Player, BukkitTask>();
 		
 		public CampfireListener() {
-			main.getInstance().getMessenger().print("I shall start listening!");
+			Supreme.getInstance().getMessenger().print("I shall start listening!");
 		}
 		
 		@EventHandler
@@ -256,7 +256,7 @@ public class Campfire {
 			if (!PersistentMeta.hasMeta(e.getPlayer(), KitMeta.class)) return;
 			
 			if (e.getPlayer().getLocation().distance(location) <= Config.campfireRange) {
-				if (!tasks.containsKey(e.getPlayer())) tasks.put(e.getPlayer(), Bukkit.getScheduler().runTaskTimerAsynchronously(main.getInstance(), new Runnable() {
+				if (!tasks.containsKey(e.getPlayer())) tasks.put(e.getPlayer(), Bukkit.getScheduler().runTaskTimerAsynchronously(Supreme.getInstance(), new Runnable() {
 					
 					int timer = Config.campfireTime;
 					
@@ -268,7 +268,7 @@ public class Campfire {
 						if (e.getPlayer().getLocation().distance(location) > Config.campfireRange || !e.getPlayer().isSneaking()) {
 							cancelTask(e.getPlayer());
 						} else if (timer <= 0) {
-							if (main.getInstance().hasPermission(e.getPlayer(), "supremekits.campfire.use")) ((Kit) PersistentMeta.getMeta(e.getPlayer(), KitMeta.class).value()).replenishPotions(e.getPlayer());
+							if (Supreme.getInstance().hasPermission(e.getPlayer(), "supremekits.campfire.use")) ((Kit) PersistentMeta.getMeta(e.getPlayer(), KitMeta.class).value()).replenishPotions(e.getPlayer());
 							cancelTask(e.getPlayer());
 						}
 						
@@ -290,7 +290,7 @@ public class Campfire {
 		private Map<Player, BukkitTask> tasks = new HashMap<Player, BukkitTask>();
 		
 		public CampfireChairListener() {
-			main.getInstance().getMessenger().print("I shall start listening from my chair!");
+			Supreme.getInstance().getMessenger().print("I shall start listening from my chair!");
 		}
 		
 		@EventHandler
@@ -298,7 +298,7 @@ public class Campfire {
 			if (!PersistentMeta.hasMeta(e.getPlayer(), KitMeta.class)) return;
 			
 			if (e.getPlayer().getLocation().distance(location) <= Config.campfireRange) {
-				if (!tasks.containsKey(e.getPlayer())) tasks.put(e.getPlayer(), Bukkit.getScheduler().runTaskTimerAsynchronously(main.getInstance(), new Runnable() {
+				if (!tasks.containsKey(e.getPlayer())) tasks.put(e.getPlayer(), Bukkit.getScheduler().runTaskTimerAsynchronously(Supreme.getInstance(), new Runnable() {
 					
 					int timer = Config.campfireTime;
 					
@@ -309,7 +309,7 @@ public class Campfire {
 						if (e.getPlayer().getLocation().distance(location) > Config.campfireRange || e.getChair().getPlayer() != e.getPlayer()) {
 							cancelTask(e.getPlayer());
 						} else if (timer <= 0) {
-							if (main.getInstance().hasPermission(e.getPlayer(), "supremekits.campfire.use")) ((Kit) PersistentMeta.getMeta(e.getPlayer(), KitMeta.class).value()).replenishPotions(e.getPlayer());
+							if (Supreme.getInstance().hasPermission(e.getPlayer(), "supremekits.campfire.use")) ((Kit) PersistentMeta.getMeta(e.getPlayer(), KitMeta.class).value()).replenishPotions(e.getPlayer());
 							cancelTask(e.getPlayer());
 						}
 						

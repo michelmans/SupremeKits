@@ -29,14 +29,15 @@ import me.alchemi.supremekits.listeners.tabcompleters.SkTabCompleter;
 import me.alchemi.supremekits.objects.Campfire;
 import me.alchemi.supremekits.objects.Kit;
 import me.alchemi.supremekits.objects.click.AbstractClick;
+import me.alchemi.supremekits.objects.placeholders.PapiExpansion;
 
-public class main extends PluginBase {
+public class Supreme extends PluginBase {
 	
 	public static File KITS_FOLDER;
 	
 	public SexyConfiguration CAMPFIRES;
 	
-	private static main instance;
+	private static Supreme instance;
 	
 	public boolean RFCenabled = false;
 	
@@ -110,6 +111,10 @@ public class main extends PluginBase {
 		enableCommands();
 		Bukkit.getPluginManager().registerEvents(new EventListener(), this);
 		
+		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			if (new PapiExpansion().register()) messenger.print("&6Papi Expansion registered!");
+		}
+		
 		messenger.print("&6DALEKS ARE SUPREME!!!");
 	}
 	
@@ -117,7 +122,7 @@ public class main extends PluginBase {
 	public void onDisable() {
 		messenger.print("&6THE.. DOCTOR... IS... ESCAPING...\n&6WHAT... ARE... THESE... WORDS?\n&6EXPLAIN! EXPLAIN!");
 		
-		for (Kit kit : main.getInstance().getKits()) {
+		for (Kit kit : Supreme.getInstance().getKits()) {
 			if (!kit.isEdited()) continue;
 			messenger.print("Saving: " + kit.getDisplayName());
 			kit.save();
@@ -219,7 +224,7 @@ public class main extends PluginBase {
 		return camps.values();
 	}
 
-	public static main getInstance() {
+	public static Supreme getInstance() {
 		return instance;
 	}
 	

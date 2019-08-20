@@ -17,9 +17,10 @@ import me.alchemi.al.configurations.Messenger;
 import me.alchemi.al.configurations.SexyConfiguration;
 import me.alchemi.al.objects.handling.SexyLocation;
 import me.alchemi.supremekits.Config.Messages;
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.objects.Campfire;
 import me.alchemi.supremekits.objects.Kit;
+import me.alchemi.supremekits.objects.placeholders.Stringer;
 
 public class SkCommand implements CommandExecutor {
 
@@ -29,12 +30,12 @@ public class SkCommand implements CommandExecutor {
 	public static final String[] getAliases = new String[] {"get", "kit", "g", "getkit"};
 	public static final String[] setAliases = new String[] {"set", "setinv", "setkit"};
 	
-	Messenger messenger = main.getInstance().getMessenger();
-	PluginCommand skCmd = main.getInstance().getCommand("supremekits");
-	PluginCommand createCmd = main.getInstance().getCommand("createkit");
-	PluginCommand kitCmd = main.getInstance().getCommand("kit");
-	PluginCommand deleteCmd = main.getInstance().getCommand("deletekit");
-	PluginCommand setCmd = main.getInstance().getCommand("setkitinventory");
+	Messenger messenger = Supreme.getInstance().getMessenger();
+	PluginCommand skCmd = Supreme.getInstance().getCommand("supremekits");
+	PluginCommand createCmd = Supreme.getInstance().getCommand("createkit");
+	PluginCommand kitCmd = Supreme.getInstance().getCommand("kit");
+	PluginCommand deleteCmd = Supreme.getInstance().getCommand("deletekit");
+	PluginCommand setCmd = Supreme.getInstance().getCommand("setkitinventory");
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -49,21 +50,21 @@ public class SkCommand implements CommandExecutor {
 					list(sender);
 					return true;
 				} else if (Arrays.asList(createAliases).contains(args[0])) {
-					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + createCmd.getUsage(), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(createCmd.getUsage()), sender);
 					return true; 
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
-					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + deleteCmd.getUsage(), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(deleteCmd.getUsage()), sender);
 					return true;
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
-					messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + setCmd.getUsage(), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(setCmd.getUsage()), sender);
 					return true;
 				} else if (args[0].equals("reload")) {
-					if (!main.KITS_FOLDER.exists()) {
+					if (!Supreme.KITS_FOLDER.exists()) {
 						messenger.print("&4Kits folder doesn't exist, creating...");
-						main.KITS_FOLDER.mkdir();
+						Supreme.KITS_FOLDER.mkdir();
 					} else {
 						messenger.print("&6Loading kits if present");
-						for (File file : main.KITS_FOLDER.listFiles()) {
+						for (File file : Supreme.KITS_FOLDER.listFiles()) {
 							if (file.isFile() && file.getName().endsWith(".yml")) {
 								Kit kit = null;
 								try {
@@ -71,28 +72,28 @@ public class SkCommand implements CommandExecutor {
 								} catch (FileNotFoundException e) {
 									e.printStackTrace();
 								}
-								if (kit != null) main.getInstance().kits.put(kit.getName(), kit);
+								if (kit != null) Supreme.getInstance().kits.put(kit.getName(), kit);
 							}
 						}
 					}
 					
 					if (Bukkit.getPluginManager().getPlugin("RFChairs") != null) {
-						main.getInstance().RFCenabled = true;
+						Supreme.getInstance().RFCenabled = true;
 					}
 					
-					if (!new File(main.getInstance().getDataFolder(), "campfires.yml").exists()) {
+					if (!new File(Supreme.getInstance().getDataFolder(), "campfires.yml").exists()) {
 						try {
-							new File(main.getInstance().getDataFolder(), "campfires.yml").createNewFile();
+							new File(Supreme.getInstance().getDataFolder(), "campfires.yml").createNewFile();
 						} catch (IOException e) {}
-						main.getInstance().CAMPFIRES = SexyConfiguration.loadConfiguration(new File(main.getInstance().getDataFolder(), "campfires.yml"));
+						Supreme.getInstance().CAMPFIRES = SexyConfiguration.loadConfiguration(new File(Supreme.getInstance().getDataFolder(), "campfires.yml"));
 					} else {
-						main.getInstance().CAMPFIRES = SexyConfiguration.loadConfiguration(new File(main.getInstance().getDataFolder(), "campfires.yml"));
+						Supreme.getInstance().CAMPFIRES = SexyConfiguration.loadConfiguration(new File(Supreme.getInstance().getDataFolder(), "campfires.yml"));
 						
-						for (String path : main.getInstance().CAMPFIRES.getValues(false).keySet()) {
+						for (String path : Supreme.getInstance().CAMPFIRES.getValues(false).keySet()) {
 							
-							ConfigurationSection sec = main.getInstance().CAMPFIRES.getConfigurationSection(path);
+							ConfigurationSection sec = Supreme.getInstance().CAMPFIRES.getConfigurationSection(path);
 							SexyLocation sl = new SexyLocation(sec);
-							main.getInstance().camps.put(sl.getLocation(), new Campfire(sl.getLocation()));
+							Supreme.getInstance().camps.put(sl.getLocation(), new Campfire(sl.getLocation()));
 							
 						}
 						
@@ -100,7 +101,7 @@ public class SkCommand implements CommandExecutor {
 					
 				} else if (args[0].equals("save")) { 
 					
-					for (Kit kit : main.getInstance().getKits()) {
+					for (Kit kit : Supreme.getInstance().getKits()) {
 						if (!kit.isEdited()) continue;
 						messenger.print("Saving: " + kit.getDisplayName());
 						kit.save();
@@ -119,7 +120,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk getkit"), sender);
+						messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/sk getkit"), sender);
 					}
 					return true;
 				} else if (Arrays.asList(createAliases).contains(args[0])) {
@@ -129,7 +130,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk create"), sender);
+						messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/sk create"), sender);
 					}
 					return true;
 				} else if (Arrays.asList(deleteAliases).contains(args[0])) {
@@ -144,7 +145,7 @@ public class SkCommand implements CommandExecutor {
 						
 						
 					} else {
-						messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/sk setkit"), sender);
+						messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/sk setkit"), sender);
 					}
 					return true;
 					
@@ -160,11 +161,11 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command(command.getName()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				return true;
 			}	
 		} else if (command.getName().equals("deletekit")) {
@@ -174,7 +175,7 @@ public class SkCommand implements CommandExecutor {
 				
 				return true;
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				return true;
 			}
 		} else if (command.getName().equals("kit")) {
@@ -185,11 +186,11 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				return true;
 			}
 		} else if (command.getName().equals("setkitinventory")) {
@@ -200,11 +201,11 @@ public class SkCommand implements CommandExecutor {
 					
 					
 				} else {
-					messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", command.getName()), sender);
+					messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command(command.getName()), sender);
 				}
 				return true;
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage(), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()), sender);
 				return true;
 			}
 		} else {
@@ -216,77 +217,79 @@ public class SkCommand implements CommandExecutor {
 	
 	private void create(Player sender, String[] args) {
 		
-		if (main.getInstance().hasPermission(sender, "supremekits.create")) {
+		if (Supreme.getInstance().hasPermission(sender, "supremekits.create")) {
 			Kit newKit = Kit.createKitArgs(sender, args);
-			if (main.getInstance().doesKitExist(newKit)) {
-				messenger.sendMessage(Messages.KITS_EXISTS.value()
-						.replace("$displayname$", main.getInstance().getKit(newKit.getName()).getDisplayName())
-						.replace("$name$", newKit.getName()), sender);
+			if (Supreme.getInstance().doesKitExist(newKit)) {
+				messenger.sendMessage(new Stringer(Messages.KITS_EXISTS)
+						.player(sender)
+						.kit(newKit)
+						.kitname(newKit), sender);
 			} else {
-				main.getInstance().newKit(newKit);
-				messenger.sendMessage(Messages.KITS_CREATED.value()
-						.replace("$displayname$", newKit.getDisplayName())
-						.replace("$name$", newKit.getName()), sender);
+				Supreme.getInstance().newKit(newKit);
+				messenger.sendMessage(new Stringer(Messages.KITS_CREATED)
+						.kit(newKit)
+						.kitname(newKit)
+						.player(sender), sender);
 			}
 		} else {
-			messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/createkit"), sender);
+			messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/createkit"), sender);
 		}
 		
 	}
 	
 	private void delete(CommandSender sender, String[] args) {
 		
-		if (main.getInstance().hasPermission(sender, "supremekits.delete")) {
-			if (main.getInstance().deleteKit(args[0])) {
-				messenger.sendMessage(Messages.KITS_DELETED.value()
-						.replace("$displayname$", args[0])
-						.replace("$name$", args[0]), sender);
+		if (Supreme.getInstance().hasPermission(sender, "supremekits.delete")) {
+			if (Supreme.getInstance().deleteKit(args[0])) {
+				messenger.sendMessage(new Stringer(Messages.KITS_DELETED)
+						.kit(args[0])
+						.kitname(args[0]), sender);
 			} else {
-				messenger.sendMessage(Messages.KITS_UNKNOWN.value()
-						.replace("$displayname$", args[0])
-						.replace("$name$", args[0]), sender);
+				messenger.sendMessage(new Stringer(Messages.KITS_UNKNOWN)
+						.kit(args[0])
+						.kitname(args[0]), sender);
 			}
 		} else {
-			messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/deletekit"), sender);
+			messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/deletekit"), sender);
 		}
 
 	}
 	
 	private void get(Player sender, String[] args) {
 		
-		if (main.getInstance().doesKitExist(args[0])) {
+		if (Supreme.getInstance().doesKitExist(args[0])) {
 			
-			Kit kit = main.getInstance().getKit(args[0]);
+			Kit kit = Supreme.getInstance().getKit(args[0]);
 			
 			kit.applyKit(sender);
 			
 		} else {
-			messenger.sendMessage(Messages.KITS_UNKNOWN.value()
-					.replace("$displayname$", args[0])
-					.replace("$name$", args[0]), sender);
+			messenger.sendMessage(new Stringer(Messages.KITS_UNKNOWN)
+					.kit(args[0])
+					.kitname(args[0]), sender);
 		}
 		
 	}
 	
 	private void set(Player sender, String[] args) {
 
-		if (main.getInstance().doesKitExist(args[0])) {
+		if (Supreme.getInstance().doesKitExist(args[0])) {
 		
-			Kit kit = main.getInstance().getKit(args[0]);
+			Kit kit = Supreme.getInstance().getKit(args[0]);
 			
-			if (main.getInstance().hasPermission(sender, "supremekits.setkit")) {
+			if (Supreme.getInstance().hasPermission(sender, "supremekits.setkit")) {
 				kit.setContents(sender);
-				messenger.sendMessage(Messages.KITS_INVENTORYSET.value()
-						.replace("$displayname$", kit.getDisplayName())
-						.replace("$name$", kit.getName()), sender);
+				messenger.sendMessage(new Stringer(Messages.KITS_INVENTORYSET)
+						.kit(kit)
+						.kitname(kit), sender);
 			} else {
-				messenger.sendMessage(Messages.COMMANDS_NOPERMISSION.value().replace("$command$", "/setkitinventory"), sender);
+				messenger.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION).command("/setkitinventory"), sender);
 			}
 		
 		} else {
-			messenger.sendMessage(Messages.KITS_UNKNOWN.value()
-					.replace("$displayname$", args[0])
-					.replace("$name$", args[0]), sender);
+			messenger.sendMessage(new Stringer(Messages.KITS_UNKNOWN)
+					.kit(args[0])
+					.kitname(args[0]), sender);
 		}
 
 	}
@@ -294,10 +297,10 @@ public class SkCommand implements CommandExecutor {
 	private void list(CommandSender sender) {
 		String msg = Messages.KITS_LIST.value();
 //		List<String> msgs = new ArrayList<String>();
-		for (Kit kit : main.getInstance().getKits()) {
+		for (Kit kit : Supreme.getInstance().getKits()) {
 			
-			if (main.getInstance().hasPermission(sender, kit.getPerm())
-					|| main.getInstance().hasPermission(sender, "supremekits.kit.*")) {
+			if (Supreme.getInstance().hasPermission(sender, kit.getPerm())
+					|| Supreme.getInstance().hasPermission(sender, "supremekits.kit.*")) {
 				
 				msg += kit.getDisplayName() + "&6, ";
 //				msgs.add(kit.getDisplayName());

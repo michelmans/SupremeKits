@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import me.alchemi.al.objects.meta.PersistentMeta;
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.meta.KitMeta;
 import me.alchemi.supremekits.objects.click.AbstractClick;
 
@@ -25,7 +25,7 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent e) {
 		if (PersistentMeta.hasMeta(e.getEntity(), KitMeta.class)) {
-			e.getEntity().removeMetadata(KitMeta.class.getName(), main.getInstance());
+			e.getEntity().removeMetadata(KitMeta.class.getName(), Supreme.getInstance());
 			
 			for (Tameable ent : e.getEntity().getWorld().getEntitiesByClass(Tameable.class)) {
 				if (ent.isTamed() && ent.getOwner().getUniqueId().equals(e.getEntity().getUniqueId())) {
@@ -56,7 +56,7 @@ public class EventListener implements Listener {
 	public void onEntityInteract(PlayerInteractEntityEvent e) {
 	
 		if (AbstractClick.hasClick(e.getRightClicked().getLocation())) {
-			if (coolTask == null) coolTask = Bukkit.getScheduler().runTask(main.getInstance(), new Runnable() {
+			if (coolTask == null) coolTask = Bukkit.getScheduler().runTask(Supreme.getInstance(), new Runnable() {
 				
 				@Override
 				public void run() {
@@ -75,7 +75,7 @@ public class EventListener implements Listener {
 		if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK)
 				&& AbstractClick.hasClick(e.getClickedBlock().getLocation())) {
 			
-			if (e.getAction() == Action.RIGHT_CLICK_BLOCK && coolTask == null) coolTask = Bukkit.getScheduler().runTaskAsynchronously(main.getInstance(), new Runnable() {
+			if (e.getAction() == Action.RIGHT_CLICK_BLOCK && coolTask == null) coolTask = Bukkit.getScheduler().runTaskAsynchronously(Supreme.getInstance(), new Runnable() {
 				
 				@Override
 				public void run() {

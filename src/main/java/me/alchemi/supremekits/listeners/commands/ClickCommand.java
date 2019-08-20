@@ -14,11 +14,12 @@ import org.bukkit.util.Vector;
 
 import me.alchemi.al.configurations.Messenger;
 import me.alchemi.supremekits.Config.Messages;
-import me.alchemi.supremekits.main;
+import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.objects.Kit;
 import me.alchemi.supremekits.objects.click.AbstractClick;
 import me.alchemi.supremekits.objects.click.Block;
 import me.alchemi.supremekits.objects.click.NPC;
+import me.alchemi.supremekits.objects.placeholders.Stringer;
 
 public class ClickCommand implements CommandExecutor {
 
@@ -31,7 +32,7 @@ public class ClickCommand implements CommandExecutor {
 		if (sender instanceof Player && sender.hasPermission(command.getPermission())) {
 			
 			if (args.length < 2) {
-				sender.sendMessage(Messenger.formatString(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage()));
+				sender.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()).parse(sender).create());
 				return true;
 			}
 			
@@ -39,7 +40,7 @@ public class ClickCommand implements CommandExecutor {
 			else if (deleteAliases.contains(args[0])) delete(sender, args);
 			else if (modifyAliases.contains(args[0])) modify(sender, args);
 			else {
-				sender.sendMessage(Messenger.formatString(Messages.COMMANDS_WRONGFORMAT.value() + command.getUsage()));
+				sender.sendMessage(new Stringer(Messages.COMMANDS_WRONGFORMAT).command(command.getUsage()).parse(sender).create());
 				return true;
 			}
 			
@@ -49,13 +50,15 @@ public class ClickCommand implements CommandExecutor {
 	
 	private void create(CommandSender sender, String[] args) {
 		if (!sender.hasPermission("supremekits.clicker.create")) {
-			sender.sendMessage(Messenger.formatString(Messages.COMMANDS_NOPERMISSION.value()
-					.replace("$command$", "/clicker create <kit>")));
+			sender.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION)
+					.command("/clicker create <kit>")
+					.parse(sender)
+					.create());
 			return;
 		}
 		Player player = (Player) sender;
 		RayTraceResult ray = getTarget(player);
-		Kit kit = main.getInstance().getKit(args[1]);
+		Kit kit = Supreme.getInstance().getKit(args[1]);
 		
 		if (ray != null) {
 			
@@ -79,18 +82,21 @@ public class ClickCommand implements CommandExecutor {
 				ray.getHitEntity().setCustomNameVisible(true);
 				((NPC)click).setEntity((LivingEntity) ray.getHitEntity());
 			}
-			main.getInstance().getMessenger().sendMessage(Messages.CLICKER_CREATED.value()
-					.replace("$type$", ray.getHitEntity() == null ? "Block" : "NPC")
-					.replace("$x$", String.valueOf(click.getLoc().getBlockX()))
-					.replace("$y$", String.valueOf(click.getLoc().getBlockY()))
-					.replace("$z$", String.valueOf(click.getLoc().getBlockZ())), sender);
+			
+			Supreme.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_CREATED)
+					.type(ray.getHitEntity() == null ? "Block" : "NPC")
+					.x(click.getLoc().getBlockX())
+					.y(click.getLoc().getBlockY())
+					.z(click.getLoc().getBlockZ()), sender);
 		}
 	}
 
 	private void delete(CommandSender sender, String[] args) {
 		if (!sender.hasPermission("supremekits.clicker.delete")) {
-			sender.sendMessage(Messenger.formatString(Messages.COMMANDS_NOPERMISSION.value()
-					.replace("$command$", "/clicker delete <kit>")));
+			sender.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION)
+					.command("/clicker delete <kit>")
+					.parse(sender)
+					.create());
 			return;
 		}
 		Player player = (Player) sender;
@@ -111,23 +117,25 @@ public class ClickCommand implements CommandExecutor {
 			if (ray.getHitEntity() != null){
 				ray.getHitEntity().setCustomNameVisible(false);
 			}
-			main.getInstance().getMessenger().sendMessage(Messages.CLICKER_REMOVED.value()
-					.replace("$type$", ray.getHitEntity() == null ? "Block" : "NPC")
-					.replace("$x$", String.valueOf(click.getLoc().getBlockX()))
-					.replace("$y$", String.valueOf(click.getLoc().getBlockY()))
-					.replace("$z$", String.valueOf(click.getLoc().getBlockZ())), sender);
+			Supreme.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_REMOVED)
+					.type(ray.getHitEntity() == null ? "Block" : "NPC")
+					.x(click.getLoc().getBlockX())
+					.y(click.getLoc().getBlockY())
+					.z(click.getLoc().getBlockZ()), sender);
 		}
 	}
 
 	private void modify(CommandSender sender, String[] args) {
 		if (!sender.hasPermission("supremekits.clicker.modify")) {
-			sender.sendMessage(Messenger.formatString(Messages.COMMANDS_NOPERMISSION.value()
-					.replace("$command$", "/clicker modify <kit>")));
+			sender.sendMessage(new Stringer(Messages.COMMANDS_NOPERMISSION)
+					.command("/clicker modify <kit>")
+					.parse(sender)
+					.create());
 			return;
 		}
 		Player player = (Player) sender;
 		RayTraceResult ray = getTarget(player);
-		Kit kit = main.getInstance().getKit(args[1]);
+		Kit kit = Supreme.getInstance().getKit(args[1]);
 		
 		if (ray != null && kit != null) {
 			
@@ -154,11 +162,11 @@ public class ClickCommand implements CommandExecutor {
 				ray.getHitEntity().setCustomNameVisible(true);
 			}
 			
-			main.getInstance().getMessenger().sendMessage(Messages.CLICKER_REMOVED.value()
-					.replace("$type$", ray.getHitEntity() == null ? "Block" : "NPC")
-					.replace("$x$", String.valueOf(click.getLoc().getBlockX()))
-					.replace("$y$", String.valueOf(click.getLoc().getBlockY()))
-					.replace("$z$", String.valueOf(click.getLoc().getBlockZ())), sender);
+			Supreme.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_MODIFIED)
+					.type(ray.getHitEntity() == null ? "Block" : "NPC")
+					.x(click.getLoc().getBlockX())
+					.y(click.getLoc().getBlockY())
+					.z(click.getLoc().getBlockZ()), sender);
 			
 		}
 	}

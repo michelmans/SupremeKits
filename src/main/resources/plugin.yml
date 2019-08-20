@@ -1,130 +1,134 @@
 name: SupremeKits
-main: me.alchemi.supremekits.main
+main: me.alchemi.supremekits.Supreme
 version: ${project.version}
 api-version: 1.13
 author: Alchemi
 description: A supreme kits plugin
-depend: [AlchemicLibrary]
-softdepend: [RFChairs]
-
+depend:
+- AlchemicLibrary
+softdepend:
+- RFChairs
+- PlaceholderAPI
 commands:
-  createkit:
-    description: Create a kit.
-    usage: /createkit <name> [displayname]
-    aliases: ["createkit", "ckit", "ck"]
-  
-  deletekit:
-    description: Delete a kit.
-    usage: /deletekit <name>
-    aliases: ["deletekit", "delkit", "dkit", "dk"]
-  
-  kit:
-    description: Get a kit.
-    usage: /kit <name>
-    aliases: ["k", "kit", "getkit"]
-    
-  setkitinventory:
-    description: Set your inventory as the kit.
-    usage: /setkitinventory <name>
-    aliases: ["setkitinv", "setkitinventory", "setkit"]
-  
-  supremekits:
-    description: Base command.
-    usage: /sk <create|delete|getkit|list|setkit> <name> [displayname]
-    aliases: ["supremekits", "sk", "kits", "supremekit"]
-  
-  setcampfire:
-    description: Create a campfire.
-    usage: /setcampfire [x] [y] [z]
-    aliases: ["setcampfire", "scf", "setcamp"]
-    
-  removecampfire:
-    description: Remove a campfire.
-    usage: /removecampfire [x] [y] [z]
-    aliases: ["removecampfire", "rcf", "removecamp"]
-    
-  campfire:
-    description: Base campfire command.
-    usage: /campfire <set|remove> [x] [y] [z]
-    aliases: ["campfire", "camp"]
-    
-  clicker:
-    description: Set a clicker at the pointed location.
-    usage: /clicker <create|delete|modify> <kit>
-    aliases: ["click"]
-    permission: supremekits.clicker
-  
+   createkit:
+      description: Create a kit.
+      usage: /createkit <name> [displayname]
+      aliases:
+      - createkit
+      - ckit
+      - ck
+   deletekit:
+      description: Delete a kit.
+      usage: /deletekit <name>
+      aliases:
+      - deletekit
+      - delkit
+      - dkit
+      - dk
+   kit:
+      description: Get a kit.
+      usage: /kit <name>
+      aliases:
+      - k
+      - kit
+      - getkit
+   setkitinventory:
+      description: Set your inventory as the kit.
+      usage: /setkitinventory <name>
+      aliases:
+      - setkitinv
+      - setkitinventory
+      - setkit
+   supremekits:
+      description: Base command.
+      usage: /sk <create|delete|getkit|list|setkit> <name> [displayname]
+      aliases:
+      - supremekits
+      - sk
+      - kits
+      - supremekit
+   setcampfire:
+      description: Create a campfire.
+      usage: /setcampfire [x] [y] [z]
+      aliases:
+      - setcampfire
+      - scf
+      - setcamp
+   removecampfire:
+      description: Remove a campfire.
+      usage: /removecampfire [x] [y] [z]
+      aliases:
+      - removecampfire
+      - rcf
+      - removecamp
+   campfire:
+      description: Base campfire command.
+      usage: /campfire <set|remove> [x] [y] [z]
+      aliases:
+      - campfire
+      - camp
+   clicker:
+      description: Set a clicker at the pointed location.
+      usage: /clicker <create|delete|modify> <kit>
+      aliases:
+      - click
+      permission: supremekits.clicker
 permissions:
-  supremekits.createkit:
-    description: Permission to create a kit.
-    default: op
-  
-  supremekits.setkit:
-    description: Permission to set a kit.
-    default: op
-   
-  supremekits.kit.*:
-    description: Permission for all kits.
-    default: false
-    
-  supremekits.deletekit:
-    description: Permission to delete a kit.
-    default: op
-    
-  supremekits.reload:
-    description: Reload permission
-    default: op
-    
-  supremekits.save:
-    description: Save permission
-    default: op
-  
-  supremekits.campfire.*:
-    description: All campfire permissions.
-    default: op
-    children:
-      supremekits.campfire.use: true
-      supremekits.campfire.set: true
-      supremekits.campfire.remove: true
-      supremekits.campfire: true
-    
-  supremekits.campfire:
-    description: Base campfire permission.
-    default: op
-    
-  supremekits.campfire.use:
-    description: Permission to use a campfire.
-    default: op
-  
-  supremekits.campfire.set:
-    description: Permission to make a campfire.
-    default: op
-  
-  supremekits.campfire.remove:
-    description: Permission to remove a campfire.
-    default: op
-  
-  supremekits.clicker.*:
-    description: All clicker permissions.
-    default: op
-    children:
-      supremekits.clicker: true
-      supremekits.clicker.create: true
-      supremekits.clicker.delete: true
-      supremekits.clicker.modify: true
-  
-  supremekits.clicker:
-    description: Clicker pemission.
-    default: op
-  
-  supremekits.clicker.create:
-    description: Permission to create a clicker.
-    default: op
-
-  supremekits.clicker.delete:
-    description: Permission to delete a clicker.
-    default: op
-
-  supremekits.clicker.modify:
-    description: Permission to modify a clicker.
-    default: op
+   supremekits.createkit:
+      description: Permission to create a kit.
+      default: op
+   supremekits.setkit:
+      description: Permission to set a kit.
+      default: op
+   supremekits.kit.*:
+      description: Permission for all kits.
+      default: false
+   supremekits.deletekit:
+      description: Permission to delete a kit.
+      default: op
+   supremekits.reload:
+      description: Reload permission
+      default: op
+   supremekits.save:
+      description: Save permission
+      default: op
+   supremekits.campfire.*:
+      description: All campfire permissions.
+      default: op
+      children:
+         supremekits.campfire.use: true
+         supremekits.campfire.set: true
+         supremekits.campfire.remove: true
+         supremekits.campfire: true
+   supremekits.campfire:
+      description: Base campfire permission.
+      default: op
+   supremekits.campfire.use:
+      description: Permission to use a campfire.
+      default: op
+   supremekits.campfire.set:
+      description: Permission to make a campfire.
+      default: op
+   supremekits.campfire.remove:
+      description: Permission to remove a campfire.
+      default: op
+   supremekits.clicker.*:
+      description: All clicker permissions.
+      default: op
+      children:
+         supremekits.clicker: true
+         supremekits.clicker.create: true
+         supremekits.clicker.delete: true
+         supremekits.clicker.modify: true
+   supremekits.clicker:
+      description: Clicker pemission.
+      default: op
+   supremekits.clicker.create:
+      description: Permission to create a clicker.
+      default: op
+   supremekits.clicker.delete:
+      description: Permission to delete a clicker.
+      default: op
+   supremekits.clicker.modify:
+      description: Permission to modify a clicker.
+      default: op

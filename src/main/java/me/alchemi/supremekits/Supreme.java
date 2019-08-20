@@ -117,7 +117,7 @@ public class Supreme extends PluginBase {
 		
 		messenger.print("&6DALEKS ARE SUPREME!!!");
 	}
-	
+
 	@Override
 	public void onDisable() {
 		messenger.print("&6THE.. DOCTOR... IS... ESCAPING...\n&6WHAT... ARE... THESE... WORDS?\n&6EXPLAIN! EXPLAIN!");

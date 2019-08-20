@@ -14,8 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffect;
-
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import me.alchemi.al.api.MaterialWrapper;
 import me.alchemi.al.configurations.SexyConfiguration;
@@ -26,7 +25,7 @@ import me.alchemi.supremekits.meta.KitMeta;
 import me.alchemi.supremekits.objects.configuration.KitPotion;
 import me.alchemi.supremekits.objects.placeholders.Stringer;
 
-@SuppressWarnings({"unchecked", "restriction"})
+@SuppressWarnings("unchecked")
 public class Kit {
 
 	private ItemStack[] armourContents = new ItemStack[4];

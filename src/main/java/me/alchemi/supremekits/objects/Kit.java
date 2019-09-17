@@ -333,7 +333,6 @@ public class Kit {
 		configurationFile.set("armour.leggings", armourContents[2]);
 		configurationFile.set("armour.boots", armourContents[3]);
 		
-		System.out.println(inventoryContents);
 		configurationFile.set("inventory", inventoryContents);
 		
 		if (!effects.isEmpty()) {

@@ -3,8 +3,13 @@ validPotionTypes:
 - LINGERING_POTION
 - SPLASH_POTION
 - FIREWORK_ROCKET
+- GOLDEN_APPLE
 
 hideEffectParticles: true
 
+# Wether or not to use the new 1.14 campfires.
+# Note: this doesn't work below 1.14!
+# Default: true
+campfireNew: true
 campfireRange: 10
 campfireTime: 10

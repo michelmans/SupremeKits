@@ -42,36 +42,48 @@ public class Campfire {
 	
 	public Campfire(Location loc) {
 		
-		location = loc.add(0.5, -.4, 0.5);
-		armourstands.add(new ArmourStandWrapper(loc, 0.0F));
-		armourstands.add(new ArmourStandWrapper(loc, 45.0F));
-		armourstands.add(new ArmourStandWrapper(loc, 90.0F));
-		armourstands.add(new ArmourStandWrapper(loc, 135.0F));
+		if (!Config.campfireNew) {
 		
-		for (int x = -1; x < 2; x++) {
-			for (int z = -1; z < 2; z++) {
-				if (x == 0 && z == 0) continue;
-				float rotation = 0.0F;
-				double x2 = x/1.6F;
-				double z2 = z/1.6F;
-				if ((x == -1 || x == 1) && (z == -1 || z == 1)) {
-					rotation = 45.0F;
-					x2 = x * Math.sqrt(Math.pow(5.0F/8.0F, 2)/2.0F);
-					z2 = z * Math.sqrt(Math.pow(5.0F/8.0F, 2)/2.0F);
+			location = loc.add(0.5, -.4, 0.5);
+			armourstands.add(new ArmourStandWrapper(loc, 0.0F));
+			armourstands.add(new ArmourStandWrapper(loc, 45.0F));
+			armourstands.add(new ArmourStandWrapper(loc, 90.0F));
+			armourstands.add(new ArmourStandWrapper(loc, 135.0F));
+			
+			for (int x = -1; x < 2; x++) {
+				for (int z = -1; z < 2; z++) {
+					if (x == 0 && z == 0) continue;
+					float rotation = 0.0F;
+					double x2 = x/1.6F;
+					double z2 = z/1.6F;
+					if ((x == -1 || x == 1) && (z == -1 || z == 1)) {
+						rotation = 45.0F;
+						x2 = x * Math.sqrt(Math.pow(5.0F/8.0F, 2)/2.0F);
+						z2 = z * Math.sqrt(Math.pow(5.0F/8.0F, 2)/2.0F);
+					}
+					armourstands.add(new ArmourStandWrapper(location.clone().add(x2, .4, z2), rotation));
+					armourstands.get(armourstands.size() - 1).notFirePart();
+					armourstands.get(armourstands.size() - 1).getArmourstand().setHelmet(new ItemStack(MaterialWrapper.SKELETON_SKULL.getMaterial()));
+					armourstands.get(armourstands.size() - 1).getArmourstand().setSmall(true);
 				}
-				armourstands.add(new ArmourStandWrapper(location.clone().add(x2, .4, z2), rotation));
-				armourstands.get(armourstands.size() - 1).notFirePart();
-				armourstands.get(armourstands.size() - 1).getArmourstand().setHelmet(new ItemStack(MaterialWrapper.SKELETON_SKULL.getMaterial()));
-				armourstands.get(armourstands.size() - 1).getArmourstand().setSmall(true);
 			}
+			location.add(0, .4, 0);
+			
+			Bukkit.getPluginManager().registerEvents(new CampfireListener(), Supreme.getInstance());
+			if (Supreme.getInstance().RFCenabled) Bukkit.getPluginManager().registerEvents(new CampfireChairListener(), Supreme.getInstance());
+			
+			tasks[0] = Bukkit.getScheduler().runTaskTimerAsynchronously(Supreme.getInstance(), new Particles(), 0, 5);
+			tasks[1] = Bukkit.getScheduler().runTaskTimerAsynchronously(Supreme.getInstance(), new EntityChecker(), 0, 5);
+			
+		} else {
+			
+			location = loc;
+			loc.getBlock().setType(MaterialWrapper.CAMPFIRE.getMaterial(), false);
+			
+			Bukkit.getPluginManager().registerEvents(new CampfireListener(), Supreme.getInstance());
+			if (Supreme.getInstance().RFCenabled) Bukkit.getPluginManager().registerEvents(new CampfireChairListener(), Supreme.getInstance());
+			
 		}
-		location.add(0, .4, 0);
-		
-		Bukkit.getPluginManager().registerEvents(new CampfireListener(), Supreme.getInstance());
-		if (Supreme.getInstance().RFCenabled) Bukkit.getPluginManager().registerEvents(new CampfireChairListener(), Supreme.getInstance());
-		
-		tasks[0] = Bukkit.getScheduler().runTaskTimerAsynchronously(Supreme.getInstance(), new Particles(), 0, 5);
-		tasks[1] = Bukkit.getScheduler().runTaskTimerAsynchronously(Supreme.getInstance(), new EntityChecker(), 0, 5);
 	}
 	
 	public void removeStands() {

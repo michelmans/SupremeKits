@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 
@@ -20,6 +21,11 @@ public class Config extends ConfigBase{
 
 	public Config() throws FileNotFoundException, IOException, InvalidConfigurationException {
 		super(Supreme.getInstance());
+	}
+	
+	@Override
+	public void reload() {
+		super.reload();
 		
 		config = ConfigEnum.CONFIG.getConfig();
 		
@@ -30,12 +36,22 @@ public class Config extends ConfigBase{
 		hideEffectParticles = config.getBoolean("hideEffectParticles", true);
 		
 		campfireRange = config.getInt("campfireRange", 10);
+		campfireTime = config.getInt("campfireTime", 10);
+		campfireNew = config.getBoolean("campfireNew");
 		
-		
+		if (!Bukkit.getServer().getClass().getPackage().getName().contains("14")) {
+			campfireNew = false;
+			
+			System.out.println(Bukkit.getServer().getClass().getPackage().getName().replaceAll("\\D", ""));
+			try {
+				Integer.valueOf(Bukkit.getServer().getClass().getPackage().getName().replaceAll("\\D", ""));
+			} catch (Exception e) {e.printStackTrace();}
+			
+		}
 	}
 
-	public static enum ConfigEnum implements IConfigEnum{
-		CONFIG(new File(Supreme.getInstance().getDataFolder(), "config.yml"), 1),
+	public static enum ConfigEnum implements IConfigEnum {
+		CONFIG(new File(Supreme.getInstance().getDataFolder(), "config.yml"), 2),
 		MESSAGES(new File(Supreme.getInstance().getDataFolder(), "messages.yml"), 3);
 
 		final File file;
@@ -116,6 +132,8 @@ public class Config extends ConfigBase{
 	
 	public static int campfireRange = 10;
 	public static int campfireTime = 10;
+	
+	public static boolean campfireNew = true;
 	
 	@Override
 	protected IConfigEnum[] getConfigs() {

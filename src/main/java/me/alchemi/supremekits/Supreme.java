@@ -87,7 +87,6 @@ public class Supreme extends PluginBase {
 		if (getServer().getPluginManager().getPlugin("RFChairs") != null 
 				|| getServer().getPluginManager().isPluginEnabled("RFChairs")) {
 			RFCenabled = true;
-			messenger.print("&6CHAIRSSS");
 		}
 		
 		if (!new File(getDataFolder(), "campfires.yml").exists()) {

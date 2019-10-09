@@ -78,7 +78,15 @@ public class Campfire {
 		} else {
 			
 			location = loc;
-			loc.getBlock().setType(MaterialWrapper.CAMPFIRE.getMaterial(), false);
+			
+			while (!location.getBlock().isEmpty()) {
+				
+				if (MaterialWrapper.wrap(location.getBlock()) == MaterialWrapper.CAMPFIRE) break;
+				
+				location = location.add(0, 1, 0);
+			}
+			
+			location.getBlock().setType(MaterialWrapper.CAMPFIRE.getMaterial(), false);
 			
 			Bukkit.getPluginManager().registerEvents(new CampfireListener(), Supreme.getInstance());
 			if (Supreme.getInstance().RFCenabled) Bukkit.getPluginManager().registerEvents(new CampfireChairListener(), Supreme.getInstance());

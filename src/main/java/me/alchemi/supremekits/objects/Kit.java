@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.Permission;
@@ -222,11 +221,7 @@ public class Kit {
 		
 		if (Supreme.getInstance().hasPermission(player, getPerm())) {
 			
-			for (Tameable e : ((Player)player).getWorld().getEntitiesByClass(Tameable.class)) {
-				if (e.isTamed() && e.getOwner().getUniqueId().equals(player.getUniqueId())) {
-					e.remove();
-				}
-			}
+			Acetone.run(player.getWorld(), player);
 
 			PlayerInventory inv = player.getInventory();
 			inv.clear();

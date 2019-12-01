@@ -20,19 +20,22 @@ public class NPCKit implements Listener{
 
 	protected Kit kit;
 	
-	Inventory inv = Bukkit.createInventory(null, InventoryType.PLAYER, Messenger.formatString("Preview: " + kit.getDisplayName()));
+	protected Inventory inv;
 	
-	public NPCKit(NPC npc) {		
+	public NPCKit(NPC npc) {
+		kit = Supreme.getInstance().getKit(npc.data().get("supremekit"));
+		inv = Bukkit.createInventory(null, InventoryType.PLAYER, Messenger.formatString("Preview: " + kit.getDisplayName()));
 		inv.setContents(kit.getArmourContents());
 		inv.addItem(kit.getInventoryContents().toArray(new ItemStack[kit.getInventoryContents().size()]));
-		
-		kit = Supreme.getInstance().getKit(npc.data().get("supremekit"));
 		
 		Bukkit.getPluginManager().registerEvents(this, Supreme.getInstance());
 	}
 	
-	public static void create(net.citizensnpcs.api.npc.NPC npc, Kit kit) {
+	public static void create(NPC npc, Kit kit) throws IllegalStateException {
+		if (npc.data().has("supremekit")) throw new IllegalStateException("&4NPC already has a kit!");
+		npc.data().set("supremekit", kit.getName());
 		npc.data().setPersistent("supremekit", kit.getName());
+		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "citizens save");
 	}
 
 	public void onLClick(Player player) {

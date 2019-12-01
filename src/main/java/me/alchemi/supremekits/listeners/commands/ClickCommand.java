@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.alchemi.al.configurations.Messenger;
 import me.alchemi.supremekits.Config.Messages;
 import me.alchemi.supremekits.Supreme;
 import me.alchemi.supremekits.objects.Kit;
@@ -56,10 +57,15 @@ public class ClickCommand implements CommandExecutor {
 		
 		boolean op = player.isOp();
 		if (!op) player.setOp(true);
-		player.performCommand("/npc select");
+		player.performCommand("npc select");
 		if (!op) player.setOp(false);
 		NPC npc = CitizensAPI.getDefaultNPCSelector().getSelected(sender);
-		NPCKit.create(npc, kit);
+		try{
+			NPCKit.create(npc, kit);
+		} catch (IllegalStateException e) {
+			player.sendMessage(Messenger.formatString(e.getMessage()));
+			return;
+		}
 		
 		Supreme.getInstance().getMessenger().sendMessage(new Stringer(Messages.CLICKER_CREATED)
 				.type("NPC")
@@ -81,7 +87,7 @@ public class ClickCommand implements CommandExecutor {
 		
 		boolean op = player.isOp();
 		if (!op) player.setOp(true);
-		player.performCommand("/npc select");
+		player.performCommand("npc select");
 		if (!op) player.setOp(false);
 		NPC npc = CitizensAPI.getDefaultNPCSelector().getSelected(sender);
 		npc.data().remove("supremekit");
@@ -106,7 +112,7 @@ public class ClickCommand implements CommandExecutor {
 		
 		boolean op = player.isOp();
 		if (!op) player.setOp(true);
-		player.performCommand("/npc select");
+		player.performCommand("npc select");
 		if (!op) player.setOp(false);
 		NPC npc = CitizensAPI.getDefaultNPCSelector().getSelected(sender);
 		npc.data().remove("supremekit");

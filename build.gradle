@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'me.alchemi'
-version = '1.4.3'
+version = '1.4.4'
 description = 'SupremeKits'
 sourceCompatibility = '1.8'
 

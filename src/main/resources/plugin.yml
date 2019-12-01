@@ -9,6 +9,7 @@ depend:
 softdepend:
 - RFChairs
 - PlaceholderAPI
+- Citizens
 commands:
    createkit:
       description: Create a kit.
